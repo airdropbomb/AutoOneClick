@@ -29,7 +29,7 @@
     // Server ကို Device ID ပို့ပြီး verify
     GM_xmlhttpRequest({
         method: 'POST',
-        url: 'http://your-vps-ip/verify-device-id',
+        url: 'http://161.97.66.32/verify-device-id',
         headers: { 'Content-Type': 'application/json' },
         data: JSON.stringify({ deviceID: deviceID }),
         onload: function(response) {
@@ -41,7 +41,7 @@
             }
             console.log('Script running for allowed Device ID: ' + deviceID);
             const script = document.createElement('script');
-            script.src = `http://your-vps-ip/enauto.js?deviceID=${deviceID}`;
+            script.src = `http://161.97.66.32/enauto.js?deviceID=${deviceID}`;
             document.head.appendChild(script);
         },
         onerror: function() {
