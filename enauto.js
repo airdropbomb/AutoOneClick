@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Binance Isolated Margin Auto Closer - Ultra Fast
 // @namespace    http://tampermonkey.net/
-// @version      2.8.7.1
+// @version      2.8.7.2
 // @description  Ultra fast auto closer with prompt-based license key validation - BTC-Trader @yannaingko2
 // @author       BTC-Trader
 // @match        https://www.binance.com/*
@@ -18,6 +18,7 @@
     // License Validation Logic
     let licenseKey = GM_getValue('licenseKey', '');
     let isLicenseValid = GM_getValue('isLicenseValid', false);
+    let isRunning = false;
 
     // Initialize script
     waitForDocumentReady(() => {
@@ -37,27 +38,29 @@
         } else {
             console.log('🔧', logMessage);
         }
+        updateStatus(message, type);
     }
 
     function waitForDocumentReady(callback) {
+        log('Checking document readiness...', 'info');
+        console.log('Initial document.readyState:', document.readyState, 'document.body:', !!document.body);
         if (document.readyState === 'complete' || document.readyState === 'interactive') {
             log('Document state: ' + document.readyState, 'info');
-            setTimeout(callback, 100); // Small delay to ensure DOM stability
+            setTimeout(callback, 200); // Increased delay for SPA stability
         } else {
             document.addEventListener('DOMContentLoaded', () => {
                 log('DOMContentLoaded triggered', 'info');
-                setTimeout(callback, 100);
+                setTimeout(callback, 200);
             });
             window.addEventListener('load', () => {
                 log('Window load triggered', 'info');
-                setTimeout(callback, 100);
+                setTimeout(callback, 200);
             });
         }
     }
 
     function initializeAutoCloseScript() {
-        log('Ultra Fast Version Loading...');
-
+        log('Ultra Fast Version Loading...', 'success');
         if (!isLicenseValid) {
             promptLicenseKey();
         } else {
@@ -66,6 +69,7 @@
     }
 
     function promptLicenseKey() {
+        log('Prompting for license key...', 'info');
         const inputKey = prompt('Enter License Key:', licenseKey);
         if (inputKey === null) {
             log('License key prompt cancelled', 'warning');
@@ -77,6 +81,7 @@
         if (!licenseKey) {
             log('No license key provided', 'error');
             alert('License key required to run the script.');
+            promptLicenseKey();
             return;
         }
 
@@ -93,6 +98,7 @@
                 } catch (e) {
                     log('Error parsing server response: ' + e, 'error');
                     alert('Error parsing server response. Please try again later.');
+                    promptLicenseKey();
                     return;
                 }
 
@@ -126,14 +132,14 @@
     }
 
     function createControlPanelWithRetry(attempt = 1) {
-        const maxRetries = 10;
+        const maxRetries = 15;
         if (attempt > maxRetries) {
             log(`Failed to create control panel after ${maxRetries} attempts`, 'error');
             alert('Failed to create control panel. Please refresh the page manually.');
             return;
         }
 
-        log(`Creating control panel (attempt ${attempt}/${maxRetries}), document.readyState: ${document.readyState}, document.body: ${!!document.body}`, 'info');
+        log(`Creating control panel (attempt ${attempt}/${maxRetries}), document.readyState: ${document.readyState}, document.body: ${!!document.body}, location: ${window.location.href}`, 'info');
 
         if (!document.body || document.readyState !== 'complete') {
             log(`Document not fully loaded, retrying (${attempt}/${maxRetries})...`, 'warning');
@@ -180,7 +186,7 @@
                 🚀 Ultra Fast Auto Closer
             </div>
             <div id="status-display" style="background: #2b2f36; padding: 10px; border-radius: 6px; margin-bottom: 10px; text-align: center; font-size: 12px;">
-                🟢 Ready - Select mode and click START
+                🟢 Ready - Click START to begin
             </div>
             <button id="start-btn" style="width: 100%; padding: 10px; background: #0ecb81; color: white; border: none; border-radius: 6px; cursor: pointer;">
                 🚀 START
@@ -194,37 +200,95 @@
         document.body.appendChild(panel);
         log('Control panel appended successfully', 'success');
 
-        setupEventListeners();
+        setTimeout(() => {
+            setupEventListeners();
+        }, 100);
+    }
+
+    function updateStatus(message, type = 'info') {
+        const statusElement = document.getElementById('status-display');
+        if (statusElement) {
+            statusElement.textContent = message;
+            statusElement.style.borderLeftColor = type === 'error' ? '#ea3943' : type === 'success' ? '#0ecb81' : type === 'warning' ? '#f0b90b' : '#f0b90b';
+            statusElement.style.color = type === 'error' ? '#ea3943' : type === 'success' ? '#0ecb81' : type === 'warning' ? '#f0b90b' : 'white';
+        }
     }
 
     function setupEventListeners() {
-        const startBtn = document.getElementById('start-btn');
-        const stopBtn = document.getElementById('stop-btn');
+        try {
+            const startBtn = document.getElementById('start-btn');
+            const stopBtn = document.getElementById('stop-btn');
 
-        if (!startBtn || !stopBtn) {
-            log('Control panel buttons not found, retrying panel creation...', 'error');
-            createControlPanelWithRetry();
-            return;
-        }
-
-        startBtn.addEventListener('click', () => {
-            log('Start button clicked', 'success');
-            alert('Auto closer started!');
-        });
-
-        stopBtn.addEventListener('click', () => {
-            log('Stop button clicked', 'success');
-            alert('Auto closer stopped!');
-        });
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                log('Emergency stop triggered by ESC key', 'warning');
-                alert('Emergency stop triggered!');
+            if (!startBtn || !stopBtn) {
+                log('Control panel buttons not found, retrying panel creation...', 'error');
+                createControlPanelWithRetry();
+                return;
             }
-        });
+
+            startBtn.addEventListener('click', () => {
+                if (!isLicenseValid) {
+                    log('License not validated, prompting for key...', 'warning');
+                    promptLicenseKey();
+                    return;
+                }
+                if (!isRunning) {
+                    isRunning = true;
+                    log('Start button clicked - Auto closer started', 'success');
+                    updateStatus('Auto closer running...', 'success');
+                    startBtn.style.display = 'none';
+                    stopBtn.style.display = 'block';
+                    startAutoClose();
+                }
+            });
+
+            stopBtn.addEventListener('click', () => {
+                if (isRunning) {
+                    isRunning = false;
+                    log('Stop button clicked - Auto closer stopped', 'success');
+                    updateStatus('Auto closer stopped', 'warning');
+                    stopBtn.style.display = 'none';
+                    startBtn.style.display = 'block';
+                }
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && isRunning) {
+                    isRunning = false;
+                    log('Emergency stop triggered by ESC key', 'warning');
+                    updateStatus('Emergency stop triggered', 'warning');
+                    stopBtn.style.display = 'none';
+                    startBtn.style.display = 'block';
+                }
+            });
+
+            log('Event listeners set up successfully', 'success');
+        } catch (error) {
+            log('Error setting up event listeners: ' + error, 'error');
+            createControlPanelWithRetry();
+        }
     }
 
-    // Minimal script for testing
+    function startAutoClose() {
+        log('Starting auto close process...', 'success');
+        updateStatus('Scanning for positions...', 'info');
+
+        // Placeholder for position scanning logic
+        setTimeout(() => {
+            log('Scanning positions (placeholder)...', 'info');
+            updateStatus('No positions found (placeholder)', 'info');
+            if (isRunning) {
+                setTimeout(startAutoClose, 5000); // Loop every 5 seconds
+            }
+        }, 1000);
+    }
+
+    // Monitor panel existence
+    setTimeout(() => {
+        if (!document.getElementById('btc-margin-closer') && isLicenseValid) {
+            log('Control panel not found after initialization, retrying...', 'warning');
+            createControlPanelWithRetry();
+        }
+    }, 5000);
+
     log('Ultra Fast Version Successfully Loaded!', 'success');
 })();
