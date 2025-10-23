@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Binance Isolated Margin Auto Closer - Ultra Fast
 // @namespace    http://tampermonkey.net/
-// @version      2.8.6
+// @version      2.8.7
 // @description  Ultra fast auto closer with license key validation - BTC-Trader @yannaingko2
 // @author       BTC-Trader
 // @match        https://www.binance.com/*
@@ -66,7 +66,7 @@
             CONFIRM_CHECK_ATTEMPTS: 1,
             CONFIRM_CHECK_DELAY: 10,
             RETRY_ATTEMPTS: 1,
-            PANEL_CREATION_RETRIES: 5,
+            PANEL_CREATION_RETRIES: 10,
             PANEL_CREATION_DELAY: 1000
         };
 
@@ -190,6 +190,7 @@
         let currentHeaderIndex = 0;
         let startTime = 0;
         let pairsProcessed = 0;
+        let observer = null;
 
         function getAllPairs() {
             const allPairs = [];
@@ -209,6 +210,9 @@
             currentGroup = savedGroup;
             operationMode = savedMode;
             selectedSinglePair = savedPair;
+
+            // Start observing DOM changes
+            setupDOMObserver();
 
             // Retry creating control panel
             createControlPanelWithRetry();
@@ -252,6 +256,23 @@
             }
         }
 
+        function setupDOMObserver() {
+            if (observer) observer.disconnect();
+
+            observer = new MutationObserver(() => {
+                if (!document.getElementById('btc-margin-closer')) {
+                    log('Control panel not found in DOM, retrying creation...', 'warning');
+                    createControlPanelWithRetry();
+                }
+            });
+
+            observer.observe(document.documentElement, {
+                childList: true,
+                subtree: true
+            });
+            log('DOM observer set up for control panel monitoring', 'info');
+        }
+
         function createControlPanelWithRetry(attempt = 1) {
             if (attempt > CONFIG.PANEL_CREATION_RETRIES) {
                 log(`Failed to create control panel after ${CONFIG.PANEL_CREATION_RETRIES} attempts`, 'error');
@@ -261,15 +282,16 @@
 
             if (!document.body) {
                 log(`Document body not ready, retrying (${attempt}/${CONFIG.PANEL_CREATION_RETRIES})...`, 'warning');
-                setTimeout(() => createControlPanelWithRetry(attempt + 1), CONFIG.PANEL_CREATION_DELAY);
+                setTimeout(() => createControlPanelWithRetry(attempt + 1), CONFIG.PANEL_CREATION_DELAY * attempt);
                 return;
             }
 
             try {
                 createControlPanel();
+                log('Control panel creation attempt successful', 'success');
             } catch (error) {
                 log(`Error creating control panel (attempt ${attempt}/${CONFIG.PANEL_CREATION_RETRIES}): ${error}`, 'error');
-                setTimeout(() => createControlPanelWithRetry(attempt + 1), CONFIG.PANEL_CREATION_DELAY);
+                setTimeout(() => createControlPanelWithRetry(attempt + 1), CONFIG.PANEL_CREATION_DELAY * attempt);
             }
         }
 
@@ -307,7 +329,7 @@
             panel.innerHTML = `
                 <div style="text-align: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid ${theme.border};">
                     <div id="header-text" style="font-weight: bold; color: ${theme.border}; font-size: 18px; margin-bottom: 3px;">🚀 Ultra Fast Auto Closer</div>
-                    <div style="font-size: 11px; color: ${theme.secondary};">v2.8.6 | BTC-Trader @yannaingko2</div>
+                    <div style="font-size: 11px; color: ${theme.secondary};">v2.8.7 | BTC-Trader @yannaingko2</div>
                 </div>
 
                 <div id="status-display" style="background: ${theme.panelBg}; padding: 12px; border-radius: 6px; margin-bottom: 15px; text-align: center; font-size: 12px; min-height: 25px; border-left: 3px solid ${theme.border};">
@@ -807,14 +829,32 @@
 
         function setupEventListeners() {
             try {
-                document.getElementById('start-btn').addEventListener('click', startAutoClose);
-                document.getElementById('stop-btn').addEventListener('click', stopAutoClose);
-                document.getElementById('refresh-btn').addEventListener('click', refreshPage);
-                document.getElementById('activate-tab-btn').addEventListener('click', activatePositionsTab);
-                document.getElementById('test-panel-btn').addEventListener('click', testPanelVisibility);
-                document.getElementById('validate-license-btn').addEventListener('click', validateLicenseKey);
+                const startBtn = document.getElementById('start-btn');
+                const stopBtn = document.getElementById('stop-btn');
+                const refreshBtn = document.getElementById('refresh-btn');
+                const activateTabBtn = document.getElementById('activate-tab-btn');
+                const testPanelBtn = document.getElementById('test-panel-btn');
+                const validateBtn = document.getElementById('validate-license-btn');
+                const groupSelect = document.getElementById('group-select');
+                const singlePairSelect = document.getElementById('single-pair-select');
+                const multipleModeBtn = document.getElementById('multiple-mode-btn');
+                const singleModeBtn = document.getElementById('single-mode-btn');
+                const themeSelector = document.getElementById('theme-selector');
 
-                document.getElementById('group-select').addEventListener('change', function(e) {
+                if (!startBtn || !stopBtn || !refreshBtn || !activateTabBtn || !testPanelBtn || !validateBtn || !groupSelect || !singlePairSelect || !multipleModeBtn || !singleModeBtn || !themeSelector) {
+                    log('One or more control panel elements not found, retrying panel creation...', 'error');
+                    createControlPanelWithRetry();
+                    return;
+                }
+
+                startBtn.addEventListener('click', startAutoClose);
+                stopBtn.addEventListener('click', stopAutoClose);
+                refreshBtn.addEventListener('click', refreshPage);
+                activateTabBtn.addEventListener('click', activatePositionsTab);
+                testPanelBtn.addEventListener('click', testPanelVisibility);
+                validateBtn.addEventListener('click', validateLicenseKey);
+
+                groupSelect.addEventListener('change', function(e) {
                     currentGroup = e.target.value === "" ? null : parseInt(e.target.value);
                     GM_setValue('selectedGroup', currentGroup);
                     currentPairIndex = 0;
@@ -823,7 +863,7 @@
                     log(`Group changed to: ${currentGroup !== null ? BTC_GROUPS[currentGroup].name : 'None'}`);
                 });
 
-                document.getElementById('single-pair-select').addEventListener('change', function(e) {
+                singlePairSelect.addEventListener('change', function(e) {
                     selectedSinglePair = e.target.value === "" ? null : e.target.value;
                     GM_setValue('selectedSinglePair', selectedSinglePair);
                     updateModeInfo();
@@ -831,15 +871,15 @@
                     log(`Single pair changed to: ${selectedSinglePair || 'None'}`);
                 });
 
-                document.getElementById('multiple-mode-btn').addEventListener('click', function() {
+                multipleModeBtn.addEventListener('click', function() {
                     setOperationMode('single');
                 });
 
-                document.getElementById('single-mode-btn').addEventListener('click', function() {
+                singleModeBtn.addEventListener('click', function() {
                     setOperationMode('single-pair');
                 });
 
-                document.getElementById('theme-selector').addEventListener('change', function(e) {
+                themeSelector.addEventListener('change', function(e) {
                     currentTheme = e.target.value;
                     GM_setValue('panelTheme', currentTheme);
                     createControlPanelWithRetry();
@@ -861,6 +901,7 @@
 
             } catch (error) {
                 log('Error setting up event listeners: ' + error, 'error');
+                createControlPanelWithRetry();
             }
         }
 
@@ -961,6 +1002,10 @@
                 if (headerInterval) {
                     clearInterval(headerInterval);
                     headerInterval = null;
+                }
+                if (observer) {
+                    observer.disconnect();
+                    observer = null;
                 }
 
                 processedPositions.clear();
@@ -1228,7 +1273,7 @@
                     log('Control panel not found after initialization, retrying...', 'warning');
                     createControlPanelWithRetry();
                 }
-            }, 2000);
+            }, 3000);
 
             // Handle page refresh
             const needReactivate = GM_getValue('reactivatePositionsTab', false);
