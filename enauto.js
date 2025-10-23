@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Binance Isolated Margin Auto Closer - Ultra Fast
 // @namespace    http://tampermonkey.net/
-// @version      2.8.4
+// @version      2.8.5
 // @description  Ultra fast auto closer with license key validation - BTC-Trader @yannaingko2
 // @author       BTC-Trader
 // @match        https://www.binance.com/*
@@ -212,7 +212,7 @@
             startMonitoring();
             startHeaderAnimation();
 
-            updateStatus('🟢 Ready - Validate license or select mode and click START', 'info');
+            updateStatus(isLicenseValid ? '🟢 Ready - Select mode and click START' : '🔑 Please validate a license key', 'info');
             updateButtonStates();
             log('Ultra fast version initialized successfully', 'success');
 
@@ -283,18 +283,18 @@
             panel.innerHTML = `
                 <div style="text-align: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid ${theme.border};">
                     <div id="header-text" style="font-weight: bold; color: ${theme.border}; font-size: 18px; margin-bottom: 3px;">🚀 Ultra Fast Auto Closer</div>
-                    <div style="font-size: 11px; color: ${theme.secondary};">v2.8.4 | BTC-Trader @yannaingko2</div>
+                    <div style="font-size: 11px; color: ${theme.secondary};">v2.8.5 | BTC-Trader @yannaingko2</div>
                 </div>
 
                 <div id="status-display" style="background: ${theme.panelBg}; padding: 12px; border-radius: 6px; margin-bottom: 15px; text-align: center; font-size: 12px; min-height: 25px; border-left: 3px solid ${theme.border};">
-                    🟢 Ready - Validate license or select mode and click START
+                    ${isLicenseValid ? '🟢 Ready - Select mode and click START' : '🔑 Please validate a license key'}
                 </div>
 
                 <!-- License Key Input -->
                 <div style="margin-bottom: 12px;">
                     <label style="display: block; margin-bottom: 6px; font-size: 11px; color: ${theme.secondary}; font-weight: bold;">🔑 License Key:</label>
                     <input id="license-key-input" type="text" placeholder="Enter license key" value="${licenseKey}" style="width: 100%; padding: 8px; border-radius: 5px; background: ${theme.panelBg}; color: ${theme.text}; border: 1px solid ${theme.secondary}; font-size: 12px;">
-                    <button id="validate-license-btn" style="width: 100%; padding: 8px; margin-top: 6px; background: linear-gradient(135deg, #0ecb81, #0a8); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 12px;">Validate License</button>
+                    <button id="validate-license-btn" style="width: 100%; padding: 8px; margin-top: 6px; background: linear-gradient(135deg, #0ecb81, #0a8); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 12px;" ${isLicenseValid ? 'disabled' : ''}>Validate License</button>
                 </div>
 
                 <div style="background: ${theme.panelBg}; padding: 10px; border-radius: 5px; margin-bottom: 12px; text-align: center;">
@@ -435,6 +435,7 @@
                 return;
             }
 
+            log('Validating license key...', 'info');
             GM_xmlhttpRequest({
                 method: 'POST',
                 url: 'https://us-central1-autoclose-6aa22.cloudfunctions.net/validateLicense',
@@ -454,9 +455,10 @@
                     if (data.valid) {
                         GM_setValue('licenseKey', licenseKey);
                         GM_setValue('isLicenseValid', true);
-                        updateStatus('License activated! Script is running.', 'success');
-                        alert('License activated! Script is running.');
-                        log('License activated! Script running...', 'success');
+                        isLicenseValid = true; // Update global variable
+                        updateStatus('License activated! Script is ready.', 'success');
+                        alert('License activated! Script is ready.');
+                        log('License activated successfully!', 'success');
                         updateButtonStates();
                     } else {
                         updateStatus('Invalid or already used license key!', 'error');
@@ -464,7 +466,11 @@
                         log('Invalid or already used license key: ' + data.error, 'error');
                         GM_setValue('isLicenseValid', false);
                         GM_deleteValue('licenseKey');
+                        isLicenseValid = false;
+                        licenseKey = '';
+                        document.getElementById('license-key-input').value = '';
                     }
+                    updateButtonStates();
                 },
                 onerror: function() {
                     updateStatus('Error connecting to license server.', 'error');
@@ -472,6 +478,10 @@
                     log('Error connecting to license server.', 'error');
                     GM_setValue('isLicenseValid', false);
                     GM_deleteValue('licenseKey');
+                    isLicenseValid = false;
+                    licenseKey = '';
+                    document.getElementById('license-key-input').value = '';
+                    updateButtonStates();
                 }
             });
         }
@@ -850,6 +860,7 @@
             if (!isLicenseValid) {
                 updateStatus('Please validate a license key first.', 'error');
                 alert('Please validate a license key to start the script.');
+                log('License validation required before starting.', 'error');
                 return;
             }
 
@@ -857,11 +868,13 @@
 
             if (operationMode === 'single' && currentGroup === null) {
                 updateStatus('Please select a trading group first', 'error');
+                alert('Please select a trading group first.');
                 return;
             }
 
             if (operationMode === 'single-pair' && selectedSinglePair === null) {
                 updateStatus('Please select a trading pair first', 'error');
+                alert('Please select a trading pair first.');
                 return;
             }
 
