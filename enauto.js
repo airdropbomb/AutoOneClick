@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Binance Isolated Margin Auto Closer - Ultra Fast
 // @namespace    http://tampermonkey.net/
-// @version      2.8.7.3
-// @description  Ultra fast auto closer with prompt-based license key validation and group-based trading - BTC-Trader @yannaingko2
+// @version      2.8.3.1
+// @description  Ultra fast auto closer with prompt-based license validation - BTC-Trader @yannaingko2
 // @author       BTC-Trader
 // @match        https://www.binance.com/*
 // @grant        GM_setValue
@@ -19,15 +19,39 @@
     let licenseKey = GM_getValue('licenseKey', '');
     let isLicenseValid = GM_getValue('isLicenseValid', false);
     let isRunning = false;
-    let currentGroup = GM_getValue('selectedGroup', null);
-    let operationMode = GM_getValue('operationMode', 'single');
-    let selectedSinglePair = GM_getValue('selectedSinglePair', null);
-    let currentPairIndex = 0;
+    let processedPositions = new Set();
     let currentPositionCount = 0;
     let totalClosed = 0;
     let errorCount = 0;
     let lastActivityTime = Date.now();
+    let currentGroup = GM_getValue('selectedGroup', null);
+    let currentPairIndex = 0;
+    let operationMode = GM_getValue('operationMode', 'single');
+    let selectedSinglePair = GM_getValue('selectedSinglePair', null);
+    let currentProcessingPair = '';
     let scanInterval = null;
+    let currentTheme = GM_getValue('panelTheme', 'dark');
+    let headerInterval = null;
+    let currentHeaderIndex = 0;
+    let startTime = 0;
+    let pairsProcessed = 0;
+
+    function log(message, type = 'info') {
+        const timestamp = new Date().toLocaleTimeString();
+        const logMessage = `[${timestamp}] ${message}`;
+        if (type === 'error') {
+            console.error('❌', logMessage);
+        } else if (type === 'success') {
+            console.log('✅', logMessage);
+        } else if (type === 'warning') {
+            console.warn('⚠️', logMessage);
+        } else {
+            console.log('🔧', logMessage);
+        }
+        updateStatus(message, type);
+    }
+
+    log('Ultra Fast Version Loading...');
 
     const CONFIG = {
         CHECK_INTERVAL: 5,
@@ -36,6 +60,16 @@
         REFRESH_DELAY: 3000,
         ERROR_RETRY_DELAY: 500,
         IDLE_REFRESH_TIMEOUT: 300000,
+        POSITIONS_TAB_RETRY_DELAY: 200,
+        POPUP_WAIT_TIME: 15,
+        MAX_ERROR_COUNT: 10,
+        POSITION_PROCESS_DELAY: 10,
+        SAFETY_DELAY: 50,
+        SETTLE_CHECK_ATTEMPTS: 1,
+        SETTLE_CHECK_DELAY: 10,
+        CONFIRM_CHECK_ATTEMPTS: 1,
+        CONFIRM_CHECK_DELAY: 10,
+        RETRY_ATTEMPTS: 1,
         PANEL_CREATION_RETRIES: 15,
         PANEL_CREATION_DELAY: 1000
     };
@@ -119,47 +153,42 @@
         }
     };
 
-    // Initialize script
-    waitForDocumentReady(() => {
-        log('Document ready, initializing script...', 'info');
-        initializeAutoCloseScript();
-    });
-
-    function log(message, type = 'info') {
-        const timestamp = new Date().toLocaleTimeString();
-        const logMessage = `[${timestamp}] ${message}`;
-        if (type === 'error') {
-            console.error('❌', logMessage);
-        } else if (type === 'success') {
-            console.log('✅', logMessage);
-        } else if (type === 'warning') {
-            console.warn('⚠️', logMessage);
-        } else {
-            console.log('🔧', logMessage);
+    const THEMES = {
+        'dark': {
+            'background': '#1e2026',
+            'text': 'white',
+            'border': '#f0b90b',
+            'panelBg': '#2b2f36',
+            'secondary': '#848e9c'
+        },
+        'light': {
+            'background': '#ffffff',
+            'text': '#1e2026',
+            'border': '#f0b90b',
+            'panelBg': '#f8f9fa',
+            'secondary': '#6c757d'
+        },
+        'blue': {
+            'background': '#0a1a2d',
+            'text': '#e9ecef',
+            'border': '#2172e5',
+            'panelBg': '#152642',
+            'secondary': '#6c8ab3'
         }
-        updateStatus(message, type);
+    };
+
+    function getAllPairs() {
+        const allPairs = [];
+        for (const group of Object.values(BTC_GROUPS)) {
+            allPairs.push(...group.pairs);
+        }
+        return [...new Set(allPairs)].sort();
     }
 
-    function waitForDocumentReady(callback) {
-        log('Checking document readiness...', 'info');
+    function initializeScript() {
+        log('Initializing Ultra Fast Version...', 'info');
         console.log('Initial document.readyState:', document.readyState, 'document.body:', !!document.body);
-        if (document.readyState === 'complete' || document.readyState === 'interactive') {
-            log('Document state: ' + document.readyState, 'info');
-            setTimeout(callback, 200);
-        } else {
-            document.addEventListener('DOMContentLoaded', () => {
-                log('DOMContentLoaded triggered', 'info');
-                setTimeout(callback, 200);
-            });
-            window.addEventListener('load', () => {
-                log('Window load triggered', 'info');
-                setTimeout(callback, 200);
-            });
-        }
-    }
 
-    function initializeAutoCloseScript() {
-        log('Ultra Fast Version Loading...', 'success');
         if (!isLicenseValid) {
             promptLicenseKey();
         } else {
@@ -249,6 +278,8 @@
         try {
             createControlPanel();
             log('Control panel created successfully', 'success');
+            setOptimalZoom();
+            startHeaderAnimation();
         } catch (error) {
             log(`Error creating control panel (attempt ${attempt}/${maxRetries}): ${error}`, 'error');
             setTimeout(() => createControlPanelWithRetry(attempt + 1), CONFIG.PANEL_CREATION_DELAY * attempt);
@@ -262,6 +293,7 @@
             log('Removed existing control panel', 'info');
         }
 
+        const theme = THEMES[currentTheme];
         const panel = document.createElement('div');
         panel.id = 'btc-margin-closer';
         panel.style.cssText = `
@@ -269,54 +301,107 @@
             top: 70px;
             right: 10px;
             z-index: 1000000;
-            background: #1e2026;
-            border: 2px solid #f0b90b;
+            background: ${theme.background};
+            border: 2px solid ${theme.border};
             border-radius: 10px;
             padding: 15px;
-            color: white;
+            color: ${theme.text};
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             min-width: 450px;
+            max-width: 450px;
             box-shadow: 0 6px 25px rgba(0,0,0,0.8);
             font-size: 13px;
             max-height: 75vh;
             overflow-y: auto;
+            transform: scale(0.95);
+            transform-origin: top right;
         `;
 
+        const allPairs = getAllPairs();
         panel.innerHTML = `
-            <div style="text-align: center; margin-bottom: 15px; font-weight: bold; color: #f0b90b;">
-                🚀 Ultra Fast Auto Closer
+            <div style="text-align: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid ${theme.border};">
+                <div id="header-text" style="font-weight: bold; color: ${theme.border}; font-size: 18px; margin-bottom: 3px;">🚀 Ultra Fast Auto Closer</div>
+                <div style="font-size: 11px; color: ${theme.secondary};">v2.8.3.1 | BTC-Trader @yannaingko2</div>
             </div>
-            <div id="status-display" style="background: #2b2f36; padding: 10px; border-radius: 6px; margin-bottom: 10px; text-align: center; font-size: 12px;">
+
+            <div id="status-display" style="background: ${theme.panelBg}; padding: 12px; border-radius: 6px; margin-bottom: 15px; text-align: center; font-size: 12px; min-height: 25px; border-left: 3px solid ${theme.border};">
                 🟢 Ready - Select mode and click START
             </div>
+
+            <div style="background: ${theme.panelBg}; padding: 10px; border-radius: 5px; margin-bottom: 12px; text-align: center;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                    <div>
+                        <div style="font-size: 10px; color: ${theme.secondary};">Pairs Processed</div>
+                        <div id="pairs-processed" style="font-size: 14px; font-weight: bold; color: ${theme.border};">0</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 10px; color: ${theme.secondary};">Time Elapsed</div>
+                        <div id="time-elapsed" style="font-size: 14px; font-weight: bold; color: #0ecb81;">0s</div>
+                    </div>
+                </div>
+            </div>
+
             <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 15px;">
-                <button id="start-btn" style="padding: 12px; background: #0ecb81; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px;">
+                <button id="start-btn" style="padding: 12px; background: linear-gradient(135deg, #0ecb81, #0a8); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px;">
                     🚀 START
                 </button>
-                <button id="refresh-btn" style="padding: 12px; background: #f0b90b; color: black; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px;">
+                <button id="refresh-btn" style="padding: 12px; background: linear-gradient(135deg, #f0b90b, #d99c00); color: black; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px;">
                     🔄 REFRESH
                 </button>
-                <button id="activate-tab-btn" style="padding: 12px; background: #2172e5; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px;">
+                <button id="activate-tab-btn" style="padding: 12px; background: linear-gradient(135deg, #2172e5, #0052cc); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px;">
                     📍 ACTIVATE TAB
                 </button>
             </div>
-            <button id="stop-btn" style="width: 100%; padding: 12px; background: #ea3943; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px; margin-bottom: 15px; display: none;">
+            <button id="stop-btn" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #ea3943, #c00); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px; margin-bottom: 15px; display: none;">
                 🛑 STOP AUTO CLOSER
             </button>
-            <div style="margin-bottom: 12px;">
-                <label style="display: block; margin-bottom: 6px; font-size: 11px; color: #848e9c; font-weight: bold;">⚙️ OPERATION MODE:</label>
+
+            <div style="background: ${theme.panelBg}; padding: 12px; border-radius: 6px; margin-bottom: 15px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 10px; color: ${theme.secondary};">Active Positions</div>
+                        <div id="position-count" style="font-size: 16px; font-weight: bold; color: ${theme.border};">0</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 10px; color: ${theme.secondary};">Total Closed</div>
+                        <div id="total-closed" style="font-size: 16px; font-weight: bold; color: #0ecb81;">0</div>
+                    </div>
+                </div>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                    <button id="multiple-mode-btn" style="padding: 10px; background: ${operationMode === 'single' ? '#3a3221' : '#2b2f36'}; color: ${operationMode === 'single' ? '#f0b90b' : '#848e9c'}; border: 2px solid ${operationMode === 'single' ? '#f0b90b' : '#848e9c'}; border-radius: 5px; cursor: pointer; font-size: 11px; font-weight: bold;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 10px; color: ${theme.secondary};">Current Mode</div>
+                        <div id="current-mode" style="font-size: 11px; font-weight: bold; color: ${theme.text};">Select mode</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 10px; color: ${theme.secondary};">Errors</div>
+                        <div id="error-count" style="font-size: 11px; font-weight: bold; color: #ea3943;">0/${CONFIG.MAX_ERROR_COUNT}</div>
+                    </div>
+                </div>
+                <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid ${theme.secondary};">
+                    <div style="font-size: 10px; color: ${theme.secondary};">Current Pair</div>
+                    <div id="current-pair" style="font-size: 12px; font-weight: bold; color: ${theme.text};">-</div>
+                </div>
+                <div style="margin-top: 6px;">
+                    <div style="font-size: 10px; color: ${theme.secondary};">Processing Pair</div>
+                    <div id="processing-pair" style="font-size: 12px; font-weight: bold; color: ${theme.border};">-</div>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 12px;">
+                <label style="display: block; margin-bottom: 6px; font-size: 11px; color: ${theme.secondary}; font-weight: bold;">⚙️ OPERATION MODE:</label>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                    <button id="multiple-mode-btn" style="padding: 10px; background: ${operationMode === 'single' ? '#3a3221' : theme.panelBg}; color: ${operationMode === 'single' ? '#f0b90b' : theme.secondary}; border: 2px solid ${operationMode === 'single' ? '#f0b90b' : theme.secondary}; border-radius: 5px; cursor: pointer; font-size: 11px; font-weight: bold;">
                         🔄 MULTIPLE MODE
                     </button>
-                    <button id="single-mode-btn" style="padding: 10px; background: ${operationMode === 'single-pair' ? '#3a243b' : '#2b2f36'}; color: ${operationMode === 'single-pair' ? 'white' : '#848e9c'}; border: 2px solid ${operationMode === 'single-pair' ? '#ea3943' : '#848e9c'}; border-radius: 5px; cursor: pointer; font-size: 11px; font-weight: bold;">
+                    <button id="single-mode-btn" style="padding: 10px; background: ${operationMode === 'single-pair' ? '#3a243b' : theme.panelBg}; color: ${operationMode === 'single-pair' ? 'white' : theme.secondary}; border: 2px solid ${operationMode === 'single-pair' ? '#ea3943' : theme.secondary}; border-radius: 5px; cursor: pointer; font-size: 11px; font-weight: bold;">
                         ⚡ SINGLE MODE
                     </button>
                 </div>
             </div>
+
             <div style="margin-bottom: 12px;">
-                <label style="display: block; margin-bottom: 6px; font-size: 11px; color: #848e9c; font-weight: bold;">📊 SELECT TRADING GROUP:</label>
-                <select id="group-select" style="width: 100%; padding: 8px; border-radius: 5px; background: #2b2f36; color: white; border: 1px solid #848e9c; font-size: 12px;">
+                <label style="display: block; margin-bottom: 6px; font-size: 11px; color: ${theme.secondary}; font-weight: bold;">📊 SELECT TRADING GROUP:</label>
+                <select id="group-select" style="width: 100%; padding: 8px; border-radius: 5px; background: ${theme.panelBg}; color: ${theme.text}; border: 1px solid ${theme.secondary}; font-size: 12px;">
                     <option value="">-- Select Trading Group --</option>
                     ${Object.entries(BTC_GROUPS).map(([key, group]) => `
                         <option value="${key}" ${currentGroup !== null && parseInt(key) === currentGroup ? 'selected' : ''}>
@@ -325,45 +410,78 @@
                     `).join('')}
                 </select>
             </div>
+
             <div style="margin-bottom: 15px;">
-                <label style="display: block; margin-bottom: 6px; font-size: 11px; color: #848e9c; font-weight: bold;">🎯 SELECT SINGLE PAIR:</label>
-                <select id="single-pair-select" style="width: 100%; padding: 8px; border-radius: 5px; background: #2b2f36; color: white; border: 1px solid #848e9c; font-size: 12px;">
+                <label style="display: block; margin-bottom: 6px; font-size: 11px; color: ${theme.secondary}; font-weight: bold;">🎯 SELECT SINGLE PAIR:</label>
+                <select id="single-pair-select" style="width: 100%; padding: 8px; border-radius: 5px; background: ${theme.panelBg}; color: ${theme.text}; border: 1px solid ${theme.secondary}; font-size: 12px;">
                     <option value="">-- Select Trading Pair --</option>
-                    ${getAllPairs().map(pair => `
+                    ${allPairs.map(pair => `
                         <option value="${pair}" ${selectedSinglePair === pair ? 'selected' : ''}>${pair}</option>
                     `).join('')}
                 </select>
             </div>
-            <div style="background: #2b2f36; padding: 10px; border-radius: 5px; text-align: center;">
-                <div style="font-size: 10px; color: #848e9c;">
+
+            <div style="background: ${theme.panelBg}; padding: 10px; border-radius: 5px; text-align: center; margin-bottom: 12px;">
+                <div style="font-size: 10px; color: ${theme.secondary}; margin-bottom: 4px;">
                     <strong>EMERGENCY STOP:</strong> Press <kbd style="background: #ea3943; color: white; padding: 1px 4px; border-radius: 2px;">ESC</kbd>
                 </div>
+                <div style="font-size: 9px; color: ${theme.secondary};">
+                    Close → Settle in BTC → Confirm
+                </div>
+                <div id="mode-info" style="font-size: 10px; color: ${theme.border}; margin-top: 4px; font-weight: bold;">
+                    Mode: <strong>Select mode</strong> | Pair: <strong id="selected-pair-info">select</strong>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+                <button id="test-panel-btn" style="padding: 6px; background: ${theme.panelBg}; color: ${theme.text}; border: 1px solid ${theme.secondary}; border-radius: 3px; cursor: pointer; font-size: 10px;">
+                    Test Panel
+                </button>
+                <select id="theme-selector" style="padding: 6px; background: ${theme.panelBg}; color: ${theme.text}; border: 1px solid ${theme.secondary}; border-radius: 3px; font-size: 10px;">
+                    <option value="dark" ${currentTheme === 'dark' ? 'selected' : ''}>Dark Theme</option>
+                    <option value="light" ${currentTheme === 'light' ? 'selected' : ''}>Light Theme</option>
+                    <option value="blue" ${currentTheme === 'blue' ? 'selected' : ''}>Blue Theme</option>
+                </select>
             </div>
         `;
 
-        log('Appending control panel to document.body', 'info');
-        document.body.appendChild(panel);
-        log('Control panel appended successfully', 'success');
-
-        setTimeout(() => {
-            setupEventListeners();
-        }, 100);
-    }
-
-    function getAllPairs() {
-        const allPairs = [];
-        for (const group of Object.values(BTC_GROUPS)) {
-            allPairs.push(...group.pairs);
+        try {
+            document.body.appendChild(panel);
+            log('Control panel appended successfully', 'success');
+            setTimeout(() => {
+                setupEventListeners();
+            }, 100);
+        } catch (error) {
+            log('Error appending control panel: ' + error, 'error');
+            throw error; // Let retry logic handle it
         }
-        return [...new Set(allPairs)].sort();
     }
 
-    function updateStatus(message, type = 'info') {
-        const statusElement = document.getElementById('status-display');
-        if (statusElement) {
-            statusElement.textContent = message;
-            statusElement.style.borderLeftColor = type === 'error' ? '#ea3943' : type === 'success' ? '#0ecb81' : type === 'warning' ? '#f0b90b' : '#f0b90b';
-            statusElement.style.color = type === 'error' ? '#ea3943' : type === 'success' ? '#0ecb81' : type === 'warning' ? '#f0b90b' : 'white';
+    function setOptimalZoom() {
+        document.body.style.zoom = '90%';
+        log('Browser zoom optimized for better visibility', 'info');
+    }
+
+    function startHeaderAnimation() {
+        if (headerInterval) clearInterval(headerInterval);
+        headerInterval = setInterval(() => {
+            currentHeaderIndex = (currentHeaderIndex + 1) % 2;
+            updateHeaderText();
+        }, 3000);
+    }
+
+    function updateHeaderText() {
+        const headerElement = document.getElementById('header-text');
+        const headers = [
+            '🚀 Ultra Fast Auto Closer',
+            '⚡ BTC-Trader @yannaingko2'
+        ];
+        if (headerElement) {
+            headerElement.textContent = headers[currentHeaderIndex];
+            headerElement.style.fontWeight = 'bold';
+            headerElement.style.color = THEMES[currentTheme].border;
+            headerElement.style.fontSize = '18px';
+            headerElement.style.marginBottom = '3px';
         }
     }
 
@@ -373,12 +491,14 @@
             const stopBtn = document.getElementById('stop-btn');
             const refreshBtn = document.getElementById('refresh-btn');
             const activateTabBtn = document.getElementById('activate-tab-btn');
+            const testPanelBtn = document.getElementById('test-panel-btn');
             const groupSelect = document.getElementById('group-select');
             const singlePairSelect = document.getElementById('single-pair-select');
             const multipleModeBtn = document.getElementById('multiple-mode-btn');
             const singleModeBtn = document.getElementById('single-mode-btn');
+            const themeSelector = document.getElementById('theme-selector');
 
-            if (!startBtn || !stopBtn || !refreshBtn || !activateTabBtn || !groupSelect || !singlePairSelect || !multipleModeBtn || !singleModeBtn) {
+            if (!startBtn || !stopBtn || !refreshBtn || !activateTabBtn || !testPanelBtn || !groupSelect || !singlePairSelect || !multipleModeBtn || !singleModeBtn || !themeSelector) {
                 log('Control panel elements not found, retrying panel creation...', 'error');
                 createControlPanelWithRetry();
                 return;
@@ -402,37 +522,13 @@
                     alert('Please select a trading pair first.');
                     return;
                 }
-                if (!isRunning) {
-                    isRunning = true;
-                    log('Start button clicked - Auto closer started', 'success');
-                    updateStatus('Auto closer running...', 'success');
-                    startBtn.style.display = 'none';
-                    stopBtn.style.display = 'block';
-                    startAutoClose();
-                }
+                startAutoClose();
             });
 
-            stopBtn.addEventListener('click', () => {
-                if (isRunning) {
-                    isRunning = false;
-                    if (scanInterval) clearInterval(scanInterval);
-                    log('Stop button clicked - Auto closer stopped', 'success');
-                    updateStatus('Auto closer stopped', 'warning');
-                    stopBtn.style.display = 'none';
-                    startBtn.style.display = 'block';
-                }
-            });
-
-            refreshBtn.addEventListener('click', () => {
-                log('Manual refresh triggered', 'info');
-                GM_setValue('reactivatePositionsTab', true);
-                window.location.reload();
-            });
-
-            activateTabBtn.addEventListener('click', () => {
-                log('Activate tab button clicked', 'info');
-                activatePositionsTab();
-            });
+            stopBtn.addEventListener('click', stopAutoClose);
+            refreshBtn.addEventListener('click', refreshPage);
+            activateTabBtn.addEventListener('click', activatePositionsTab);
+            testPanelBtn.addEventListener('click', testPanelVisibility);
 
             groupSelect.addEventListener('change', (e) => {
                 currentGroup = e.target.value === "" ? null : parseInt(e.target.value);
@@ -451,28 +547,28 @@
                 log(`Single pair changed to: ${selectedSinglePair || 'None'}`, 'info');
             });
 
-            multipleModeBtn.addEventListener('click', () => {
-                setOperationMode('single');
-            });
+            multipleModeBtn.addEventListener('click', () => setOperationMode('single'));
+            singleModeBtn.addEventListener('click', () => setOperationMode('single-pair'));
 
-            singleModeBtn.addEventListener('click', () => {
-                setOperationMode('single-pair');
+            themeSelector.addEventListener('change', (e) => {
+                currentTheme = e.target.value;
+                GM_setValue('panelTheme', currentTheme);
+                createControlPanel();
+                startHeaderAnimation();
+                log(`Theme changed to: ${currentTheme}`, 'info');
             });
 
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape' && isRunning) {
-                    isRunning = false;
-                    if (scanInterval) clearInterval(scanInterval);
                     log('Emergency stop triggered by ESC key', 'warning');
-                    updateStatus('Emergency stop triggered', 'warning');
-                    stopBtn.style.display = 'none';
-                    startBtn.style.display = 'block';
+                    stopAutoClose();
                 }
             });
 
             updateModeInfo();
             updateOperationModeButtons();
             updateDropdownStates();
+            updateButtonStates();
             log('Event listeners set up successfully', 'success');
         } catch (error) {
             log('Error setting up event listeners: ' + error, 'error');
@@ -480,196 +576,20 @@
         }
     }
 
-    function setOperationMode(mode) {
-        operationMode = mode;
-        GM_setValue('operationMode', mode);
-        updateModeInfo();
-        updateOperationModeButtons();
-        updateDropdownStates();
-        log(`Operation mode changed to: ${mode}`, 'info');
-    }
-
-    function updateModeInfo() {
-        const modeInfoElement = document.getElementById('mode-info');
-        if (modeInfoElement) {
-            if (operationMode === 'single' && currentGroup !== null) {
-                const groupName = BTC_GROUPS[currentGroup].name;
-                const currentPair = BTC_GROUPS[currentGroup].pairs[currentPairIndex];
-                modeInfoElement.innerHTML = `Mode: <strong>Multiple (${groupName})</strong> | Pair: <strong>${currentPair}</strong>`;
-            } else if (operationMode === 'single-pair' && selectedSinglePair) {
-                modeInfoElement.innerHTML = `Mode: <strong>Single Pair</strong> | Pair: <strong>${selectedSinglePair}</strong>`;
-            } else {
-                modeInfoElement.innerHTML = 'Mode: <strong>Select mode</strong> | Pair: <strong>select</strong>';
-            }
-        }
-    }
-
-    function updateOperationModeButtons() {
-        const multipleBtn = document.getElementById('multiple-mode-btn');
-        const singleBtn = document.getElementById('single-mode-btn');
-        if (multipleBtn && singleBtn) {
-            multipleBtn.style.background = operationMode === 'single' ? '#3a3221' : '#2b2f36';
-            multipleBtn.style.color = operationMode === 'single' ? '#f0b90b' : '#848e9c';
-            multipleBtn.style.border = `2px solid ${operationMode === 'single' ? '#f0b90b' : '#848e9c'}`;
-            singleBtn.style.background = operationMode === 'single-pair' ? '#3a243b' : '#2b2f36';
-            singleBtn.style.color = operationMode === 'single-pair' ? 'white' : '#848e9c';
-            singleBtn.style.border = `2px solid ${operationMode === 'single-pair' ? '#ea3943' : '#848e9c'}`;
-        }
-    }
-
-    function updateDropdownStates() {
-        const groupSelect = document.getElementById('group-select');
-        const pairSelect = document.getElementById('single-pair-select');
-        if (groupSelect && pairSelect) {
-            groupSelect.disabled = operationMode === 'single-pair';
-            pairSelect.disabled = operationMode === 'single';
-        }
-    }
-
-    function startAutoClose() {
-        log('Starting auto close process...', 'success');
-        updateStatus('Activating Positions tab...', 'info');
-
-        activatePositionsTab(() => {
-            log('Positions tab activated, starting scan...', 'success');
-            scanAndClosePositions();
-        });
-    }
-
-    function activatePositionsTab(callback) {
-        log('Activating Positions tab...', 'info');
-        const selectors = [
-            'div.draggableCancel.text-\\[14px\\][data-testid="Positions"]',
-            'div[data-testid="Positions"]',
-            '[data-testid="Positions"]',
-            'div[class*="Positions"]',
-            'button:contains("Positions")',
-            'div:contains("Positions")'
-        ];
-
-        let attempts = 0;
-        const maxAttempts = 5;
-
-        function tryActivate() {
-            attempts++;
-            let tabFound = false;
-
-            for (let selector of selectors) {
-                try {
-                    let positionsTab = document.querySelector(selector);
-                    if (selector.includes(':contains')) {
-                        const allTabs = document.querySelectorAll('div[class*="tab"], button[class*="tab"], div.draggableCancel');
-                        for (let tab of allTabs) {
-                            if (tab.textContent && tab.textContent.includes('Positions')) {
-                                positionsTab = tab;
-                                break;
-                            }
-                        }
-                    }
-
-                    if (positionsTab && positionsTab.isConnected && isElementVisible(positionsTab)) {
-                        log(`Found Positions tab with selector: ${selector}`, 'success');
-                        positionsTab.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
-                        safeClick(positionsTab, 'Positions Tab');
-                        log('Positions tab activated successfully', 'success');
-                        updateStatus('Positions tab activated', 'success');
-                        setTimeout(callback, 1000);
-                        tabFound = true;
-                        break;
-                    }
-                } catch (error) {
-                    // Continue
-                }
-            }
-
-            if (!tabFound) {
-                log(`Positions tab not found (attempt ${attempts}/${maxAttempts})`, 'warning');
-                if (attempts < maxAttempts) {
-                    setTimeout(tryActivate, 500);
-                } else {
-                    log('Positions tab activation failed after all attempts', 'error');
-                    updateStatus('Positions tab not found - Manual navigation needed', 'error');
-                    callback();
-                }
-            }
-        }
-
-        tryActivate();
-    }
-
-    function isElementVisible(element) {
-        if (!element) return false;
-        try {
-            const style = window.getComputedStyle(element);
-            return style.display !== 'none' &&
-                   style.visibility !== 'hidden' &&
-                   element.offsetParent !== null &&
-                   element.offsetWidth > 0 &&
-                   element.offsetHeight > 0;
-        } catch (error) {
-            return false;
-        }
-    }
-
-    function safeClick(element, description) {
-        try {
-            if (element && element.isConnected && isElementVisible(element)) {
-                element.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
-                element.click();
-                log(`Clicked: ${description}`, 'success');
-                return true;
-            }
-            return false;
-        } catch (error) {
-            log(`Error clicking ${description}: ${error}`, 'error');
-            return false;
-        }
-    }
-
-    function scanAndClosePositions() {
-        if (!isRunning) return;
-        if (!isLicenseValid) {
-            log('License not validated, stopping scan...', 'error');
-            updateStatus('Please validate a license key to start.', 'error');
-            return;
-        }
-
-        try {
-            const positions = findOpenPositions();
-            currentPositionCount = positions.length;
-            updateStats();
-
-            if (positions.length === 0) {
-                log('No Close Position buttons found', 'info');
-                updateStatus('No positions found - continuing scan...', 'info');
-                if (Date.now() - lastActivityTime > CONFIG.IDLE_REFRESH_TIMEOUT) {
-                    log('Idle timeout reached, refreshing page...', 'warning');
-                    updateStatus('Idle timeout - Refreshing...', 'warning');
-                    GM_setValue('reactivatePositionsTab', true);
-                    window.location.reload();
-                    return;
-                }
-                moveToNextPair();
-            } else {
-                let currentPair = operationMode === 'single' ? BTC_GROUPS[currentGroup].pairs[currentPairIndex] : selectedSinglePair;
-                log(`Found ${positions.length} positions for ${currentPair}`, 'success');
-                updateStatus(`Found ${positions.length} positions for ${currentPair} - Starting close process...`, 'warning');
-                lastActivityTime = Date.now();
-                closeNextPosition(positions, 0);
-            }
-        } catch (error) {
-            log('Error during position scanning: ' + error, 'error');
-            updateStatus('Error during scanning', 'error');
-            setTimeout(scanAndClosePositions, CONFIG.ERROR_RETRY_DELAY);
+    function updateSpeedStats() {
+        const pairsProcessedElement = document.getElementById('pairs-processed');
+        const timeElapsedElement = document.getElementById('time-elapsed');
+        if (pairsProcessedElement) pairsProcessedElement.textContent = pairsProcessed;
+        if (timeElapsedElement && startTime > 0) {
+            const elapsed = Math.floor((Date.now() - startTime) / 1000);
+            timeElapsedElement.textContent = `${elapsed}s`;
         }
     }
 
     function findOpenPositions() {
         const positions = [];
-        const processedPositions = new Set();
-        const closeButtonTexts = ['Close Position', 'Close', 'Close All', 'Liquidate'];
-
         try {
+            const closeButtonTexts = ['Close Position', 'Close', 'Close All', 'Liquidate'];
             const allElements = document.querySelectorAll('button, div, span');
             for (let element of allElements) {
                 try {
@@ -683,7 +603,6 @@
                                     button: element,
                                     id: positionId
                                 });
-                                processedPositions.add(positionId);
                             }
                         }
                     }
@@ -694,71 +613,7 @@
         } catch (error) {
             log('Error in findOpenPositions: ' + error, 'error');
         }
-
         return positions;
-    }
-
-    function generatePositionId(element) {
-        const rect = element.getBoundingClientRect();
-        const text = element.textContent || '';
-        return `${text}-${rect.top}-${rect.left}-${Date.now()}`.replace(/\s+/g, '_');
-    }
-
-    function closeNextPosition(positions, index) {
-        if (!isRunning) return;
-        if (index >= positions.length) {
-            updateStatus('All positions processed in current pair', 'success');
-            moveToNextPair();
-            return;
-        }
-
-        const position = positions[index];
-        const currentPair = operationMode === 'single' ? BTC_GROUPS[currentGroup].pairs[currentPairIndex] : selectedSinglePair;
-        updateStatus(`Closing position ${index + 1}/${positions.length} in ${currentPair}...`, 'warning');
-
-        if (!position.button.isConnected) {
-            setTimeout(() => closeNextPosition(positions, index + 1), CONFIG.DELAY_BETWEEN_CLICKS);
-            return;
-        }
-
-        if (safeClick(position.button, 'Close Position button')) {
-            setTimeout(() => {
-                if (!isRunning) return;
-                processModalButtons(position, () => {
-                    totalClosed++;
-                    errorCount = Math.max(0, errorCount - 1);
-                    updateStats();
-                    updateStatus(`Position ${index + 1} closed successfully in ${currentPair}`, 'success');
-                    lastActivityTime = Date.now();
-                    setTimeout(() => closeNextPosition(positions, index + 1), CONFIG.DELAY_BETWEEN_CLICKS);
-                }, () => {
-                    setTimeout(() => closeNextPosition(positions, index + 1), CONFIG.DELAY_BETWEEN_CLICKS);
-                });
-            }, CONFIG.MODAL_WAIT_TIME);
-        } else {
-            setTimeout(() => closeNextPosition(positions, index + 1), CONFIG.DELAY_BETWEEN_CLICKS);
-        }
-    }
-
-    function processModalButtons(position, onSuccess, onError) {
-        const settleBtn = findSettleButton();
-        if (settleBtn && safeClick(settleBtn, 'Settle in BTC')) {
-            setTimeout(() => {
-                const confirmBtn = findConfirmButton();
-                if (confirmBtn && safeClick(confirmBtn, 'Confirm')) {
-                    setTimeout(() => onSuccess(), CONFIG.DELAY_BETWEEN_CLICKS);
-                } else {
-                    onSuccess();
-                }
-            }, CONFIG.DELAY_BETWEEN_CLICKS);
-        } else {
-            const confirmBtn = findConfirmButton();
-            if (confirmBtn && safeClick(confirmBtn, 'Confirm')) {
-                setTimeout(() => onSuccess(), CONFIG.DELAY_BETWEEN_CLICKS);
-            } else {
-                onError();
-            }
-        }
     }
 
     function findSettleButton() {
@@ -797,17 +652,146 @@
                     }
                 }
             }
+            for (let selector of confirmSelectors) {
+                const elements = document.querySelectorAll(selector);
+                for (let element of elements) {
+                    if (element.isConnected && isElementVisible(element)) {
+                        return element;
+                    }
+                }
+            }
         } catch (error) {
             log('Error finding confirm button: ' + error, 'error');
         }
         return null;
     }
 
+    function safeClick(element, description) {
+        try {
+            if (element && element.isConnected && isElementVisible(element)) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
+                const clickMethods = [
+                    () => { if (typeof element.click === 'function') element.click(); },
+                    () => {
+                        const event = new MouseEvent('click', {
+                            view: window,
+                            bubbles: true,
+                            cancelable: true
+                        });
+                        element.dispatchEvent(event);
+                    }
+                ];
+                for (let method of clickMethods) {
+                    try {
+                        method();
+                    } catch (e) {
+                        // Continue to next method
+                    }
+                }
+                log(`Clicked: ${description}`, 'success');
+                return true;
+            }
+            return false;
+        } catch (error) {
+            log(`Error clicking ${description}: ${error}`, 'error');
+            return false;
+        }
+    }
+
+    function isElementVisible(element) {
+        if (!element) return false;
+        try {
+            const style = window.getComputedStyle(element);
+            return style.display !== 'none' &&
+                   style.visibility !== 'hidden' &&
+                   element.offsetParent !== null &&
+                   element.offsetWidth > 0 &&
+                   element.offsetHeight > 0;
+        } catch (error) {
+            return false;
+        }
+    }
+
+    function processModalButtons(position, onSuccess, onError) {
+        const settleBtn = findSettleButton();
+        if (settleBtn && safeClick(settleBtn, 'Settle in BTC')) {
+            setTimeout(() => {
+                const confirmBtn = findConfirmButton();
+                if (confirmBtn && safeClick(confirmBtn, 'Confirm')) {
+                    setTimeout(() => onSuccess(), CONFIG.CONFIRM_CHECK_DELAY);
+                } else {
+                    onSuccess();
+                }
+            }, CONFIG.SETTLE_CHECK_DELAY);
+        } else {
+            const confirmBtn = findConfirmButton();
+            if (confirmBtn && safeClick(confirmBtn, 'Confirm')) {
+                setTimeout(() => onSuccess(), CONFIG.CONFIRM_CHECK_DELAY);
+            } else {
+                onError();
+            }
+        }
+    }
+
+    function closeNextPosition(positions, index, retryCount = 0) {
+        if (!isRunning) return;
+        if (index >= positions.length) {
+            updateStatus('All positions processed in current pair', 'success');
+            moveToNextPair();
+            return;
+        }
+
+        const position = positions[index];
+        const currentPair = operationMode === 'single' ? BTC_GROUPS[currentGroup].pairs[currentPairIndex] : selectedSinglePair;
+        updateStatus(`Closing position ${index + 1}/${positions.length} in ${currentPair}...`, 'warning');
+
+        if (!position.button.isConnected) {
+            processedPositions.add(position.id);
+            setTimeout(() => closeNextPosition(positions, index + 1), CONFIG.DELAY_BETWEEN_CLICKS);
+            return;
+        }
+
+        if (safeClick(position.button, 'Close Position button')) {
+            setTimeout(() => {
+                if (!isRunning) return;
+                processModalButtons(position, () => {
+                    processedPositions.add(position.id);
+                    totalClosed++;
+                    errorCount = Math.max(0, errorCount - 1);
+                    updateStats();
+                    updateStatus(`Position ${index + 1} closed successfully in ${currentPair}`, 'success');
+                    lastActivityTime = Date.now();
+                    setTimeout(() => closeNextPosition(positions, index + 1), CONFIG.DELAY_BETWEEN_CLICKS);
+                }, () => {
+                    processedPositions.add(position.id);
+                    errorCount++;
+                    updateStats();
+                    setTimeout(() => closeNextPosition(positions, index + 1), CONFIG.DELAY_BETWEEN_CLICKS);
+                });
+            }, CONFIG.MODAL_WAIT_TIME);
+        } else {
+            processedPositions.add(position.id);
+            errorCount++;
+            updateStats();
+            setTimeout(() => closeNextPosition(positions, index + 1), CONFIG.DELAY_BETWEEN_CLICKS);
+        }
+    }
+
+    function generatePositionId(element) {
+        const rect = element.getBoundingClientRect();
+        const text = element.textContent || '';
+        return `${text}-${rect.top}-${rect.left}-${Date.now()}`.replace(/\s+/g, '_');
+    }
+
     function moveToNextPair() {
+        pairsProcessed++;
+        updateSpeedStats();
         if (operationMode === 'single' && currentGroup !== null && currentPairIndex < BTC_GROUPS[currentGroup].pairs.length - 1) {
             currentPairIndex++;
             updateModeInfo();
-            log(`Moving to next pair: ${BTC_GROUPS[currentGroup].pairs[currentPairIndex]}`, 'info');
+            const nextPair = BTC_GROUPS[currentGroup].pairs[currentPairIndex];
+            log(`Moving to next pair: ${nextPair}`, 'info');
+            updateStatus(`Moving to next pair: ${nextPair}`, 'info');
             setTimeout(() => {
                 if (isRunning) scanAndClosePositions();
             }, CONFIG.CHECK_INTERVAL);
@@ -815,6 +799,7 @@
             currentPairIndex = 0;
             updateModeInfo();
             log('Completed group cycle, restarting from first pair', 'info');
+            updateStatus('Completed group cycle, restarting from first pair', 'info');
             setTimeout(() => {
                 if (isRunning) scanAndClosePositions();
             }, CONFIG.CHECK_INTERVAL);
@@ -825,20 +810,331 @@
         }
     }
 
+    function scanAndClosePositions() {
+        if (!isRunning) return;
+        if (!isLicenseValid) {
+            log('License not validated, stopping scan...', 'error');
+            updateStatus('Please validate a license key to start.', 'error');
+            stopAutoClose();
+            return;
+        }
+
+        try {
+            const positions = findOpenPositions();
+            currentPositionCount = positions.length;
+            updateStats();
+            if (positions.length === 0) {
+                log('No Close Position buttons found', 'info');
+                updateStatus('No positions found - continuing scan...', 'info');
+                if (Date.now() - lastActivityTime > CONFIG.IDLE_REFRESH_TIMEOUT) {
+                    log('Idle timeout reached, refreshing page...', 'warning');
+                    updateStatus('Idle timeout - Refreshing...', 'warning');
+                    GM_setValue('reactivatePositionsTab', true);
+                    window.location.reload();
+                    return;
+                }
+                moveToNextPair();
+            } else {
+                let currentPair = operationMode === 'single' ? BTC_GROUPS[currentGroup].pairs[currentPairIndex] : selectedSinglePair;
+                log(`Found ${positions.length} positions for ${currentPair}`, 'success');
+                updateStatus(`Found ${positions.length} positions for ${currentPair} - Starting close process...`, 'warning');
+                updateProcessingPair(currentPair);
+                lastActivityTime = Date.now();
+                closeNextPosition(positions, 0);
+            }
+        } catch (error) {
+            handleError('Error during position scanning: ' + error);
+            setTimeout(() => scanAndClosePositions(), CONFIG.ERROR_RETRY_DELAY);
+        }
+    }
+
+    function startAutoClose() {
+        log('Starting auto close process...', 'success');
+        if (operationMode === 'single' && currentGroup === null) {
+            updateStatus('Please select a trading group first', 'error');
+            alert('Please select a trading group first.');
+            return;
+        }
+        if (operationMode === 'single-pair' && selectedSinglePair === null) {
+            updateStatus('Please select a trading pair first', 'error');
+            alert('Please select a trading pair first.');
+            return;
+        }
+        if (!isRunning) {
+            isRunning = true;
+            startTime = Date.now();
+            pairsProcessed = 0;
+            log('Auto-close process STARTED', 'success');
+            processedPositions.clear();
+            currentPositionCount = 0;
+            totalClosed = 0;
+            errorCount = 0;
+            currentPairIndex = 0;
+            lastActivityTime = Date.now();
+            updateButtonStates();
+            updateStats();
+            updateSpeedStats();
+            updateStatus(operationMode === 'single' ? `Running - Multiple: ${BTC_GROUPS[currentGroup].name}` : `Running - Single: ${selectedSinglePair}`, 'success');
+            setTimeout(() => {
+                log('Step 1: Activating Positions Tab...', 'info');
+                activatePositionsTab(() => {
+                    log('Step 2: Starting Position Scan...', 'info');
+                    scanAndClosePositions();
+                });
+            }, CONFIG.SAFETY_DELAY);
+        } else {
+            updateStatus('Auto closer is already running', 'warning');
+        }
+    }
+
+    function stopAutoClose() {
+        log('Stopping auto close process...', 'info');
+        if (isRunning) {
+            isRunning = false;
+            if (scanInterval) {
+                clearInterval(scanInterval);
+                scanInterval = null;
+            }
+            if (headerInterval) {
+                clearInterval(headerInterval);
+                headerInterval = null;
+            }
+            processedPositions.clear();
+            updateProcessingPair('');
+            updateButtonStates();
+            updateStatus('Auto closer stopped by user', 'warning');
+            log('Auto-close process STOPPED', 'success');
+        } else {
+            updateStatus('Auto closer is not running', 'warning');
+        }
+    }
+
+    function updateStatus(message, type = 'info') {
+        const statusElement = document.getElementById('status-display');
+        if (statusElement) {
+            statusElement.textContent = message;
+            statusElement.style.borderLeftColor = type === 'error' ? '#ea3943' : type === 'success' ? '#0ecb81' : type === 'warning' ? '#f0b90b' : THEMES[currentTheme].border;
+            statusElement.style.color = type === 'error' ? '#ea3943' : type === 'success' ? '#0ecb81' : type === 'warning' ? '#f0b90b' : THEMES[currentTheme].text;
+        }
+    }
+
     function updateStats() {
         const positionCountElement = document.getElementById('position-count');
         const totalClosedElement = document.getElementById('total-closed');
+        const errorCountElement = document.getElementById('error-count');
+        const currentPairElement = document.getElementById('current-pair');
         if (positionCountElement) positionCountElement.textContent = currentPositionCount;
         if (totalClosedElement) totalClosedElement.textContent = totalClosed;
+        if (errorCountElement) errorCountElement.textContent = `${errorCount}/${CONFIG.MAX_ERROR_COUNT}`;
+        if (currentPairElement) {
+            if (operationMode === 'single' && currentGroup !== null) {
+                currentPairElement.textContent = BTC_GROUPS[currentGroup].pairs[currentPairIndex];
+            } else if (operationMode === 'single-pair' && selectedSinglePair) {
+                currentPairElement.textContent = selectedSinglePair;
+            } else {
+                currentPairElement.textContent = '-';
+            }
+        }
     }
 
-    // Monitor panel existence
-    setTimeout(() => {
-        if (!document.getElementById('btc-margin-closer') && isLicenseValid) {
-            log('Control panel not found after initialization, retrying...', 'warning');
-            createControlPanelWithRetry();
+    function updateProcessingPair(pair) {
+        const processingElement = document.getElementById('processing-pair');
+        if (processingElement) {
+            processingElement.textContent = pair || '-';
         }
-    }, 5000);
+        currentProcessingPair = pair;
+    }
+
+    function updateButtonStates() {
+        const startBtn = document.getElementById('start-btn');
+        const stopBtn = document.getElementById('stop-btn');
+        if (startBtn) startBtn.style.display = isRunning ? 'none' : 'block';
+        if (stopBtn) stopBtn.style.display = isRunning ? 'block' : 'none';
+    }
+
+    function updateModeInfo() {
+        const modeInfoElement = document.getElementById('mode-info');
+        const currentModeElement = document.getElementById('current-mode');
+        const selectedPairInfoElement = document.getElementById('selected-pair-info');
+        if (modeInfoElement && currentModeElement && selectedPairInfoElement) {
+            if (operationMode === 'single' && currentGroup !== null) {
+                const groupName = BTC_GROUPS[currentGroup].name;
+                const currentPair = BTC_GROUPS[currentGroup].pairs[currentPairIndex];
+                modeInfoElement.innerHTML = `Mode: <strong>Multiple (${groupName})</strong> | Pair: <strong>${currentPair}</strong>`;
+                currentModeElement.textContent = `Multiple: ${groupName}`;
+                selectedPairInfoElement.textContent = currentPair;
+            } else if (operationMode === 'single-pair' && selectedSinglePair) {
+                modeInfoElement.innerHTML = `Mode: <strong>Single Pair</strong> | Pair: <strong>${selectedSinglePair}</strong>`;
+                currentModeElement.textContent = 'Single Pair';
+                selectedPairInfoElement.textContent = selectedSinglePair;
+            } else {
+                modeInfoElement.innerHTML = 'Mode: <strong>Select mode</strong> | Pair: <strong>select</strong>';
+                currentModeElement.textContent = 'Select mode';
+                selectedPairInfoElement.textContent = 'select';
+            }
+        }
+    }
+
+    function updateOperationModeButtons() {
+        const multipleBtn = document.getElementById('multiple-mode-btn');
+        const singleBtn = document.getElementById('single-mode-btn');
+        const theme = THEMES[currentTheme];
+        if (multipleBtn && singleBtn) {
+            multipleBtn.style.background = operationMode === 'single' ? '#3a3221' : theme.panelBg;
+            multipleBtn.style.color = operationMode === 'single' ? '#f0b90b' : theme.secondary;
+            multipleBtn.style.border = `2px solid ${operationMode === 'single' ? '#f0b90b' : theme.secondary}`;
+            singleBtn.style.background = operationMode === 'single-pair' ? '#3a243b' : theme.panelBg;
+            singleBtn.style.color = operationMode === 'single-pair' ? 'white' : theme.secondary;
+            singleBtn.style.border = `2px solid ${operationMode === 'single-pair' ? '#ea3943' : theme.secondary}`;
+        }
+    }
+
+    function updateDropdownStates() {
+        const groupSelect = document.getElementById('group-select');
+        const pairSelect = document.getElementById('single-pair-select');
+        if (groupSelect && pairSelect) {
+            groupSelect.disabled = operationMode === 'single-pair';
+            pairSelect.disabled = operationMode === 'single';
+        }
+    }
+
+    function setOperationMode(mode) {
+        operationMode = mode;
+        GM_setValue('operationMode', mode);
+        updateModeInfo();
+        updateOperationModeButtons();
+        updateDropdownStates();
+        updateButtonStates();
+        log(`Operation mode changed to: ${mode}`, 'info');
+    }
+
+    function refreshPage() {
+        log('Manual refresh triggered', 'info');
+        GM_setValue('reactivatePositionsTab', true);
+        window.location.reload();
+    }
+
+    function activatePositionsTab(callback = () => {}) {
+        log('Activating Positions tab...', 'info');
+        updateStatus('Activating Positions tab...', 'info');
+        let attempts = 0;
+        const maxAttempts = 5;
+        function tryActivate() {
+            attempts++;
+            const selectors = [
+                'div.draggableCancel.text-\\[14px\\][data-testid="Positions"]',
+                'div[data-testid="Positions"]',
+                '[data-testid="Positions"]',
+                'div[class*="Positions"]',
+                'button:contains("Positions")',
+                'div:contains("Positions")',
+                '.css-1dbjc4n.r-1habvwh.r-18u37iz.r-16x7wis.r-1ny4l3l'
+            ];
+            let tabFound = false;
+            for (let selector of selectors) {
+                try {
+                    let positionsTab = document.querySelector(selector);
+                    if (selector.includes(':contains')) {
+                        const allTabs = document.querySelectorAll('div[class*="tab"], button[class*="tab"], div.draggableCancel');
+                        for (let tab of allTabs) {
+                            if (tab.textContent && tab.textContent.includes('Positions')) {
+                                positionsTab = tab;
+                                break;
+                            }
+                        }
+                    }
+                    if (positionsTab && positionsTab.isConnected && isElementVisible(positionsTab)) {
+                        log(`Found Positions tab with selector: ${selector}`, 'success');
+                        positionsTab.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
+                        setTimeout(() => {
+                            safeClick(positionsTab, 'Positions Tab');
+                            log('Positions tab ACTIVATED successfully!', 'success');
+                            updateStatus('Positions tab ACTIVATED', 'success');
+                            setTimeout(callback, 1000);
+                        }, 100);
+                        tabFound = true;
+                        break;
+                    }
+                } catch (error) {
+                    // Continue
+                }
+            }
+            if (!tabFound) {
+                log(`Positions tab not found (attempt ${attempts}/${maxAttempts})`, 'warning');
+                if (attempts < maxAttempts) {
+                    setTimeout(tryActivate, 500);
+                } else {
+                    log('Positions tab activation FAILED after all attempts', 'error');
+                    updateStatus('Positions tab not found - Manual navigation needed', 'error');
+                    callback();
+                }
+            }
+        }
+        tryActivate();
+        return true;
+    }
+
+    function handleError(errorMessage) {
+        errorCount++;
+        log(`Error: ${errorMessage}`, 'error');
+        updateStatus(`Error: ${errorMessage}`, 'error');
+        if (errorCount >= CONFIG.MAX_ERROR_COUNT) {
+            log('Max error count reached, refreshing page...', 'error');
+            updateStatus('Max errors - Refreshing page...', 'error');
+            GM_setValue('reactivatePositionsTab', true);
+            window.location.reload();
+        }
+        updateStats();
+    }
+
+    function testPanelVisibility() {
+        const panel = document.getElementById('btc-margin-closer');
+        if (panel) {
+            panel.style.border = '3px solid #00ff00';
+            panel.style.boxShadow = '0 0 20px #00ff00';
+            setTimeout(() => {
+                panel.style.border = `2px solid ${THEMES[currentTheme].border}`;
+                panel.style.boxShadow = '0 6px 25px rgba(0,0,0,0.8)';
+            }, 1000);
+            log('Panel visibility test completed', 'success');
+            updateStatus('Panel visibility test completed', 'success');
+        }
+    }
+
+    function startMonitoring() {
+        log('Starting background monitoring...', 'info');
+        setTimeout(() => {
+            if (!document.getElementById('btc-margin-closer') && isLicenseValid) {
+                log('Control panel not found after initialization, retrying...', 'warning');
+                createControlPanelWithRetry();
+            }
+        }, 5000);
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initializeScript);
+    } else {
+        setTimeout(initializeScript, 200);
+    }
+
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            const needReactivate = GM_getValue('reactivatePositionsTab', false);
+            if (needReactivate) {
+                GM_setValue('reactivatePositionsTab', false);
+                log('AUTO REFRESH DETECTED - Reactivating Positions tab...', 'success');
+                updateStatus('Reactivating Positions tab after refresh...', 'info');
+                setTimeout(() => {
+                    activatePositionsTab(() => {
+                        if (isRunning) {
+                            log('Auto resuming scanning after refresh...', 'success');
+                            scanAndClosePositions();
+                        }
+                    });
+                }, 1000);
+            }
+        }, 1000);
+    });
 
     log('Ultra Fast Version Successfully Loaded!', 'success');
 })();
