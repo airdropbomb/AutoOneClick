@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Binance Isolated Margin Auto Closer - Ultra Fast
 // @namespace    http://tampermonkey.net/
-// @version      2.8.7
+// @version      2.8.8
 // @description  Ultra fast auto closer with license key validation - BTC-Trader @yannaingko2
 // @author       BTC-Trader
 // @match        https://www.binance.com/*
@@ -19,34 +19,45 @@
     let licenseKey = GM_getValue('licenseKey', '');
     let isLicenseValid = GM_getValue('isLicenseValid', false);
 
-    // Check if license is already valid
-    if (isLicenseValid && licenseKey) {
-        log('License already validated, starting script...', 'success');
+    // Initialize script
+    waitForDocumentReady(() => {
+        log('Document ready, initializing script...', 'info');
         initializeAutoCloseScript();
-    } else {
-        // Initialize script and show license input in control panel
-        initializeAutoCloseScript();
+    });
+
+    function log(message, type = 'info') {
+        const timestamp = new Date().toLocaleTimeString();
+        const logMessage = `[${timestamp}] ${message}`;
+        if (type === 'error') {
+            console.error('❌', logMessage);
+        } else if (type === 'success') {
+            console.log('✅', logMessage);
+        } else if (type === 'warning') {
+            console.warn('⚠️', logMessage);
+        } else {
+            console.log('🔧', logMessage);
+        }
+        updateStatus(message, type);
+    }
+
+    function waitForDocumentReady(callback) {
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+            log('Document state: ' + document.readyState, 'info');
+            setTimeout(callback, 100); // Small delay to ensure DOM stability
+        } else {
+            document.addEventListener('DOMContentLoaded', () => {
+                log('DOMContentLoaded triggered', 'info');
+                setTimeout(callback, 100);
+            });
+            window.addEventListener('load', () => {
+                log('Window load triggered', 'info');
+                setTimeout(callback, 100);
+            });
+        }
     }
 
     // Original script logic wrapped in a function
     function initializeAutoCloseScript() {
-        function log(message, type = 'info') {
-            const timestamp = new Date().toLocaleTimeString();
-            const logMessage = `[${timestamp}] ${message}`;
-
-            if (type === 'error') {
-                console.error('❌', logMessage);
-            } else if (type === 'success') {
-                console.log('✅', logMessage);
-            } else if (type === 'warning') {
-                console.warn('⚠️', logMessage);
-            } else {
-                console.log('🔧', logMessage);
-            }
-
-            updateStatus(message, type);
-        }
-
         log('Ultra Fast Version Loading...');
 
         const CONFIG = {
@@ -66,7 +77,7 @@
             CONFIRM_CHECK_ATTEMPTS: 1,
             CONFIRM_CHECK_DELAY: 10,
             RETRY_ATTEMPTS: 1,
-            PANEL_CREATION_RETRIES: 10,
+            PANEL_CREATION_RETRIES: 15,
             PANEL_CREATION_DELAY: 1000
         };
 
@@ -280,18 +291,20 @@
                 return;
             }
 
-            if (!document.body) {
-                log(`Document body not ready, retrying (${attempt}/${CONFIG.PANEL_CREATION_RETRIES})...`, 'warning');
-                setTimeout(() => createControlPanelWithRetry(attempt + 1), CONFIG.PANEL_CREATION_DELAY * attempt);
+            log(`Creating control panel (attempt ${attempt}/${CONFIG.PANEL_CREATION_RETRIES}), document.readyState: ${document.readyState}, document.body: ${!!document.body}`, 'info');
+
+            if (!document.body || document.readyState !== 'complete') {
+                log(`Document not fully loaded, retrying (${attempt}/${CONFIG.PANEL_CREATION_RETRIES})...`, 'warning');
+                setTimeout(() => createControlPanelWithRetry(attempt + 1), CONFIG.PANEL_CREATION_DELAY * (attempt * 1.5));
                 return;
             }
 
             try {
                 createControlPanel();
-                log('Control panel creation attempt successful', 'success');
+                log('Control panel created successfully', 'success');
             } catch (error) {
                 log(`Error creating control panel (attempt ${attempt}/${CONFIG.PANEL_CREATION_RETRIES}): ${error}`, 'error');
-                setTimeout(() => createControlPanelWithRetry(attempt + 1), CONFIG.PANEL_CREATION_DELAY * attempt);
+                setTimeout(() => createControlPanelWithRetry(attempt + 1), CONFIG.PANEL_CREATION_DELAY * (attempt * 1.5));
             }
         }
 
@@ -299,6 +312,7 @@
             const existingPanel = document.getElementById('btc-margin-closer');
             if (existingPanel) {
                 existingPanel.remove();
+                log('Removed existing control panel', 'info');
             }
 
             const theme = THEMES[currentTheme];
@@ -325,148 +339,148 @@
                 transform-origin: top right;
             `;
 
-            const allPairs = getAllPairs();
-            panel.innerHTML = `
-                <div style="text-align: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid ${theme.border};">
-                    <div id="header-text" style="font-weight: bold; color: ${theme.border}; font-size: 18px; margin-bottom: 3px;">🚀 Ultra Fast Auto Closer</div>
-                    <div style="font-size: 11px; color: ${theme.secondary};">v2.8.7 | BTC-Trader @yannaingko2</div>
-                </div>
-
-                <div id="status-display" style="background: ${theme.panelBg}; padding: 12px; border-radius: 6px; margin-bottom: 15px; text-align: center; font-size: 12px; min-height: 25px; border-left: 3px solid ${theme.border};">
-                    ${isLicenseValid ? '🟢 Ready - Select mode and click START' : '🔑 Please validate a license key'}
-                </div>
-
-                <!-- License Key Input -->
-                <div style="margin-bottom: 12px;">
-                    <label style="display: block; margin-bottom: 6px; font-size: 11px; color: ${theme.secondary}; font-weight: bold;">🔑 License Key:</label>
-                    <input id="license-key-input" type="text" placeholder="Enter license key" value="${licenseKey}" style="width: 100%; padding: 8px; border-radius: 5px; background: ${theme.panelBg}; color: ${theme.text}; border: 1px solid ${theme.secondary}; font-size: 12px;">
-                    <button id="validate-license-btn" style="width: 100%; padding: 8px; margin-top: 6px; background: linear-gradient(135deg, #0ecb81, #0a8); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 12px;" ${isLicenseValid ? 'disabled' : ''}>Validate License</button>
-                </div>
-
-                <div style="background: ${theme.panelBg}; padding: 10px; border-radius: 5px; margin-bottom: 12px; text-align: center;">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                        <div>
-                            <div style="font-size: 10px; color: ${theme.secondary};">Pairs Processed</div>
-                            <div id="pairs-processed" style="font-size: 14px; font-weight: bold; color: ${theme.border};">0</div>
-                        </div>
-                        <div>
-                            <div style="font-size: 10px; color: ${theme.secondary};">Time Elapsed</div>
-                            <div id="time-elapsed" style="font-size: 14px; font-weight: bold; color: #0ecb81;">0s</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 15px;">
-                    <button id="start-btn" style="padding: 12px; background: linear-gradient(135deg, #0ecb81, #0a8); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px;">
-                        🚀 START
-                    </button>
-                    <button id="refresh-btn" style="padding: 12px; background: linear-gradient(135deg, #f0b90b, #d99c00); color: black; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px;">
-                        🔄 REFRESH
-                    </button>
-                    <button id="activate-tab-btn" style="padding: 12px; background: linear-gradient(135deg, #2172e5, #0052cc); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px;">
-                        📍 ACTIVATE TAB
-                    </button>
-                </div>
-                <button id="stop-btn" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #ea3943, #c00); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px; margin-bottom: 15px; display: none;">
-                    🛑 STOP AUTO CLOSER
-                </button>
-
-                <div style="background: ${theme.panelBg}; padding: 12px; border-radius: 6px; margin-bottom: 15px;">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
-                        <div style="text-align: center;">
-                            <div style="font-size: 10px; color: ${theme.secondary};">Active Positions</div>
-                            <div id="position-count" style="font-size: 16px; font-weight: bold; color: ${theme.border};">0</div>
-                        </div>
-                        <div style="text-align: center;">
-                            <div style="font-size: 10px; color: ${theme.secondary};">Total Closed</div>
-                            <div id="total-closed" style="font-size: 16px; font-weight: bold; color: #0ecb81;">0</div>
-                        </div>
-                    </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                        <div style="text-align: center;">
-                            <div style="font-size: 10px; color: ${theme.secondary};">Current Mode</div>
-                            <div id="current-mode" style="font-size: 11px; font-weight: bold; color: ${theme.text};">Select mode</div>
-                        </div>
-                        <div style="text-align: center;">
-                            <div style="font-size: 10px; color: ${theme.secondary};">Errors</div>
-                            <div id="error-count" style="font-size: 11px; font-weight: bold; color: #ea3943;">0/${CONFIG.MAX_ERROR_COUNT}</div>
-                        </div>
-                    </div>
-                    <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid ${theme.secondary};">
-                        <div style="font-size: 10px; color: ${theme.secondary};">Current Pair</div>
-                        <div id="current-pair" style="font-size: 12px; font-weight: bold; color: ${theme.text};">-</div>
-                    </div>
-                    <div style="margin-top: 6px;">
-                        <div style="font-size: 10px; color: ${theme.secondary};">Processing Pair</div>
-                        <div id="processing-pair" style="font-size: 12px; font-weight: bold; color: ${theme.border};">-</div>
-                    </div>
-                </div>
-
-                <div style="margin-bottom: 12px;">
-                    <label style="display: block; margin-bottom: 6px; font-size: 11px; color: ${theme.secondary}; font-weight: bold;">⚙️ OPERATION MODE:</label>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                        <button id="multiple-mode-btn" style="padding: 10px; background: ${operationMode === 'single' ? '#3a3221' : theme.panelBg}; color: ${operationMode === 'single' ? '#f0b90b' : theme.secondary}; border: 2px solid ${operationMode === 'single' ? '#f0b90b' : theme.secondary}; border-radius: 5px; cursor: pointer; font-size: 11px; font-weight: bold;">
-                            🔄 MULTIPLE MODE
-                        </button>
-                        <button id="single-mode-btn" style="padding: 10px; background: ${operationMode === 'single-pair' ? '#3a243b' : theme.panelBg}; color: ${operationMode === 'single-pair' ? 'white' : theme.secondary}; border: 2px solid ${operationMode === 'single-pair' ? '#ea3943' : theme.secondary}; border-radius: 5px; cursor: pointer; font-size: 11px; font-weight: bold;">
-                            ⚡ SINGLE MODE
-                        </button>
-                    </div>
-                </div>
-
-                <div style="margin-bottom: 12px;">
-                    <label style="display: block; margin-bottom: 6px; font-size: 11px; color: ${theme.secondary}; font-weight: bold;">📊 SELECT TRADING GROUP:</label>
-                    <select id="group-select" style="width: 100%; padding: 8px; border-radius: 5px; background: ${theme.panelBg}; color: ${theme.text}; border: 1px solid ${theme.secondary}; font-size: 12px;">
-                        <option value="">-- Select Trading Group --</option>
-                        ${Object.entries(BTC_GROUPS).map(([key, group]) => `
-                            <option value="${key}" ${currentGroup !== null && parseInt(key) === currentGroup ? 'selected' : ''}>
-                                [${key}] ${group.name} - ${group.pairs.length} pairs
-                            </option>
-                        `).join('')}
-                    </select>
-                </div>
-
-                <div style="margin-bottom: 15px;">
-                    <label style="display: block; margin-bottom: 6px; font-size: 11px; color: ${theme.secondary}; font-weight: bold;">🎯 SELECT SINGLE PAIR:</label>
-                    <select id="single-pair-select" style="width: 100%; padding: 8px; border-radius: 5px; background: ${theme.panelBg}; color: ${theme.text}; border: 1px solid ${theme.secondary}; font-size: 12px;">
-                        <option value="">-- Select Trading Pair --</option>
-                        ${allPairs.map(pair => `
-                            <option value="${pair}" ${selectedSinglePair === pair ? 'selected' : ''}>${pair}</option>
-                        `).join('')}
-                    </select>
-                </div>
-
-                <div style="background: ${theme.panelBg}; padding: 10px; border-radius: 5px; text-align: center; margin-bottom: 12px;">
-                    <div style="font-size: 10px; color: ${theme.secondary}; margin-bottom: 4px;">
-                        <strong>EMERGENCY STOP:</strong> Press <kbd style="background: #ea3943; color: white; padding: 1px 4px; border-radius: 2px;">ESC</kbd>
-                    </div>
-                    <div style="font-size: 9px; color: ${theme.secondary};">
-                        Close → Settle in BTC → Confirm
-                    </div>
-                    <div id="mode-info" style="font-size: 10px; color: ${theme.border}; margin-top: 4px; font-weight: bold;">
-                        Mode: <strong>Select mode</strong> | Pair: <strong id="selected-pair-info">select</strong>
-                    </div>
-                </div>
-
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
-                    <button id="test-panel-btn" style="padding: 6px; background: ${theme.panelBg}; color: ${theme.text}; border: 1px solid ${theme.secondary}; border-radius: 3px; cursor: pointer; font-size: 10px;">
-                        Test Panel
-                    </button>
-                    <select id="theme-selector" style="padding: 6px; background: ${theme.panelBg}; color: ${theme.text}; border: 1px solid ${theme.secondary}; border-radius: 3px; font-size: 10px;">
-                        <option value="dark" ${currentTheme === 'dark' ? 'selected' : ''}>Dark Theme</option>
-                        <option value="light" ${currentTheme === 'light' ? 'selected' : ''}>Light Theme</option>
-                        <option value="blue" ${currentTheme === 'blue' ? 'selected' : ''}>Blue Theme</option>
-                    </select>
-                </div>
-            `;
-
             try {
+                panel.innerHTML = `
+                    <div style="text-align: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid ${theme.border};">
+                        <div id="header-text" style="font-weight: bold; color: ${theme.border}; font-size: 18px; margin-bottom: 3px;">🚀 Ultra Fast Auto Closer</div>
+                        <div style="font-size: 11px; color: ${theme.secondary};">v2.8.8 | BTC-Trader @yannaingko2</div>
+                    </div>
+
+                    <div id="status-display" style="background: ${theme.panelBg}; padding: 12px; border-radius: 6px; margin-bottom: 15px; text-align: center; font-size: 12px; min-height: 25px; border-left: 3px solid ${theme.border};">
+                        ${isLicenseValid ? '🟢 Ready - Select mode and click START' : '🔑 Please validate a license key'}
+                    </div>
+
+                    <!-- License Key Input -->
+                    <div style="margin-bottom: 12px;">
+                        <label style="display: block; margin-bottom: 6px; font-size: 11px; color: ${theme.secondary}; font-weight: bold;">🔑 License Key:</label>
+                        <input id="license-key-input" type="text" placeholder="Enter license key" value="${licenseKey}" style="width: 100%; padding: 8px; border-radius: 5px; background: ${theme.panelBg}; color: ${theme.text}; border: 1px solid ${theme.secondary}; font-size: 12px;">
+                        <button id="validate-license-btn" style="width: 100%; padding: 8px; margin-top: 6px; background: linear-gradient(135deg, #0ecb81, #0a8); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 12px;" ${isLicenseValid ? 'disabled' : ''}>Validate License</button>
+                    </div>
+
+                    <div style="background: ${theme.panelBg}; padding: 10px; border-radius: 5px; margin-bottom: 12px; text-align: center;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                            <div>
+                                <div style="font-size: 10px; color: ${theme.secondary};">Pairs Processed</div>
+                                <div id="pairs-processed" style="font-size: 14px; font-weight: bold; color: ${theme.border};">0</div>
+                            </div>
+                            <div>
+                                <div style="font-size: 10px; color: ${theme.secondary};">Time Elapsed</div>
+                                <div id="time-elapsed" style="font-size: 14px; font-weight: bold; color: #0ecb81;">0s</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 15px;">
+                        <button id="start-btn" style="padding: 12px; background: linear-gradient(135deg, #0ecb81, #0a8); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px;">
+                            🚀 START
+                        </button>
+                        <button id="refresh-btn" style="padding: 12px; background: linear-gradient(135deg, #f0b90b, #d99c00); color: black; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px;">
+                            🔄 REFRESH
+                        </button>
+                        <button id="activate-tab-btn" style="padding: 12px; background: linear-gradient(135deg, #2172e5, #0052cc); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px;">
+                            📍 ACTIVATE TAB
+                        </button>
+                    </div>
+                    <button id="stop-btn" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #ea3943, #c00); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px; margin-bottom: 15px; display: none;">
+                        🛑 STOP AUTO CLOSER
+                    </button>
+
+                    <div style="background: ${theme.panelBg}; padding: 12px; border-radius: 6px; margin-bottom: 15px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+                            <div style="text-align: center;">
+                                <div style="font-size: 10px; color: ${theme.secondary};">Active Positions</div>
+                                <div id="position-count" style="font-size: 16px; font-weight: bold; color: ${theme.border};">0</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 10px; color: ${theme.secondary};">Total Closed</div>
+                                <div id="total-closed" style="font-size: 16px; font-weight: bold; color: #0ecb81;">0</div>
+                            </div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                            <div style="text-align: center;">
+                                <div style="font-size: 10px; color: ${theme.secondary};">Current Mode</div>
+                                <div id="current-mode" style="font-size: 11px; font-weight: bold; color: ${theme.text};">Select mode</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div style="font-size: 10px; color: ${theme.secondary};">Errors</div>
+                                <div id="error-count" style="font-size: 11px; font-weight: bold; color: #ea3943;">0/${CONFIG.MAX_ERROR_COUNT}</div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid ${theme.secondary};">
+                            <div style="font-size: 10px; color: ${theme.secondary};">Current Pair</div>
+                            <div id="current-pair" style="font-size: 12px; font-weight: bold; color: ${theme.text};">-</div>
+                        </div>
+                        <div style="margin-top: 6px;">
+                            <div style="font-size: 10px; color: ${theme.secondary};">Processing Pair</div>
+                            <div id="processing-pair" style="font-size: 12px; font-weight: bold; color: ${theme.border};">-</div>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 12px;">
+                        <label style="display: block; margin-bottom: 6px; font-size: 11px; color: ${theme.secondary}; font-weight: bold;">⚙️ OPERATION MODE:</label>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                            <button id="multiple-mode-btn" style="padding: 10px; background: ${operationMode === 'single' ? '#3a3221' : theme.panelBg}; color: ${operationMode === 'single' ? '#f0b90b' : theme.secondary}; border: 2px solid ${operationMode === 'single' ? '#f0b90b' : theme.secondary}; border-radius: 5px; cursor: pointer; font-size: 11px; font-weight: bold;">
+                                🔄 MULTIPLE MODE
+                            </button>
+                            <button id="single-mode-btn" style="padding: 10px; background: ${operationMode === 'single-pair' ? '#3a243b' : theme.panelBg}; color: ${operationMode === 'single-pair' ? 'white' : theme.secondary}; border: 2px solid ${operationMode === 'single-pair' ? '#ea3943' : theme.secondary}; border-radius: 5px; cursor: pointer; font-size: 11px; font-weight: bold;">
+                                ⚡ SINGLE MODE
+                            </button>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 12px;">
+                        <label style="display: block; margin-bottom: 6px; font-size: 11px; color: ${theme.secondary}; font-weight: bold;">📊 SELECT TRADING GROUP:</label>
+                        <select id="group-select" style="width: 100%; padding: 8px; border-radius: 5px; background: ${theme.panelBg}; color: ${theme.text}; border: 1px solid ${theme.secondary}; font-size: 12px;">
+                            <option value="">-- Select Trading Group --</option>
+                            ${Object.entries(BTC_GROUPS).map(([key, group]) => `
+                                <option value="${key}" ${currentGroup !== null && parseInt(key) === currentGroup ? 'selected' : ''}>
+                                    [${key}] ${group.name} - ${group.pairs.length} pairs
+                                </option>
+                            `).join('')}
+                        </select>
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; margin-bottom: 6px; font-size: 11px; color: ${theme.secondary}; font-weight: bold;">🎯 SELECT SINGLE PAIR:</label>
+                        <select id="single-pair-select" style="width: 100%; padding: 8px; border-radius: 5px; background: ${theme.panelBg}; color: ${theme.text}; border: 1px solid ${theme.secondary}; font-size: 12px;">
+                            <option value="">-- Select Trading Pair --</option>
+                            ${getAllPairs().map(pair => `
+                                <option value="${pair}" ${selectedSinglePair === pair ? 'selected' : ''}>${pair}</option>
+                            `).join('')}
+                        </select>
+                    </div>
+
+                    <div style="background: ${theme.panelBg}; padding: 10px; border-radius: 5px; text-align: center; margin-bottom: 12px;">
+                        <div style="font-size: 10px; color: ${theme.secondary}; margin-bottom: 4px;">
+                            <strong>EMERGENCY STOP:</strong> Press <kbd style="background: #ea3943; color: white; padding: 1px 4px; border-radius: 2px;">ESC</kbd>
+                        </div>
+                        <div style="font-size: 9px; color: ${theme.secondary};">
+                            Close → Settle in BTC → Confirm
+                        </div>
+                        <div id="mode-info" style="font-size: 10px; color: ${theme.border}; margin-top: 4px; font-weight: bold;">
+                            Mode: <strong>Select mode</strong> | Pair: <strong id="selected-pair-info">select</strong>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+                        <button id="test-panel-btn" style="padding: 6px; background: ${theme.panelBg}; color: ${theme.text}; border: 1px solid ${theme.secondary}; border-radius: 3px; cursor: pointer; font-size: 10px;">
+                            Test Panel
+                        </button>
+                        <select id="theme-selector" style="padding: 6px; background: ${theme.panelBg}; color: ${theme.text}; border: 1px solid ${theme.secondary}; border-radius: 3px; font-size: 10px;">
+                            <option value="dark" ${currentTheme === 'dark' ? 'selected' : ''}>Dark Theme</option>
+                            <option value="light" ${currentTheme === 'light' ? 'selected' : ''}>Light Theme</option>
+                            <option value="blue" ${currentTheme === 'blue' ? 'selected' : ''}>Blue Theme</option>
+                        </select>
+                    </div>
+                `;
+
+                log('Appending control panel to document.body', 'info');
                 document.body.appendChild(panel);
-                log('Control panel created successfully', 'success');
+                log('Control panel appended successfully', 'success');
 
                 setTimeout(() => {
                     setupEventListeners();
-                }, 50);
+                }, 100);
             } catch (error) {
                 throw new Error(`Failed to append control panel: ${error}`);
             }
@@ -501,11 +515,13 @@
                     if (data.valid) {
                         GM_setValue('licenseKey', licenseKey);
                         GM_setValue('isLicenseValid', true);
-                        isLicenseValid = true; // Update global variable
+                        isLicenseValid = true;
                         updateStatus('License activated! Script is ready.', 'success');
                         alert('License activated! Script is ready.');
                         log('License activated successfully!', 'success');
                         updateButtonStates();
+                        // Recreate panel to ensure it shows after validation
+                        createControlPanelWithRetry();
                     } else {
                         updateStatus('Invalid or already used license key!', 'error');
                         alert('Invalid or already used license key! Script will not run.');
@@ -1256,45 +1272,33 @@
             log('Starting background monitoring...');
         }
 
-        function waitForDocumentReady(callback) {
-            if (document.readyState === 'complete' || document.readyState === 'interactive') {
-                callback();
-            } else {
-                document.addEventListener('DOMContentLoaded', callback);
-                window.addEventListener('load', callback);
+        // Ensure panel creation after page load
+        setTimeout(() => {
+            if (!document.getElementById('btc-margin-closer')) {
+                log('Control panel not found after initialization, retrying...', 'warning');
+                createControlPanelWithRetry();
             }
-        }
+        }, 5000);
 
-        waitForDocumentReady(() => {
-            initializeScript();
-            // Ensure panel creation after page load
+        // Handle page refresh
+        const needReactivate = GM_getValue('reactivatePositionsTab', false);
+        if (needReactivate) {
+            GM_setValue('reactivatePositionsTab', false);
+            log('AUTO REFRESH DETECTED - Reactivating Positions tab...', 'success');
+            updateStatus('Reactivating Positions tab after refresh...', 'info');
+
             setTimeout(() => {
-                if (!document.getElementById('btc-margin-closer')) {
-                    log('Control panel not found after initialization, retrying...', 'warning');
-                    createControlPanelWithRetry();
-                }
-            }, 3000);
-
-            // Handle page refresh
-            const needReactivate = GM_getValue('reactivatePositionsTab', false);
-            if (needReactivate) {
-                GM_setValue('reactivatePositionsTab', false);
-                log('AUTO REFRESH DETECTED - Reactivating Positions tab...', 'success');
-                updateStatus('Reactivating Positions tab after refresh...', 'info');
+                createControlPanelWithRetry();
+                activatePositionsTab();
 
                 setTimeout(() => {
-                    createControlPanelWithRetry();
-                    activatePositionsTab();
-
-                    setTimeout(() => {
-                        if (isRunning) {
-                            log('Auto resuming scanning after refresh...', 'success');
-                            scanAndClosePositions();
-                        }
-                    }, 2000);
-                }, 1000);
-            }
-        });
+                    if (isRunning) {
+                        log('Auto resuming scanning after refresh...', 'success');
+                        scanAndClosePositions();
+                    }
+                }, 2000);
+            }, 1000);
+        }
 
         log('Ultra Fast Version Successfully Loaded!', 'success');
     }
