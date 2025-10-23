@@ -2,7 +2,7 @@
 // @name         Binance Isolated Margin Auto Closer - Ultra Fast
 // @namespace    http://tampermonkey.net/
 // @version      2.8.3
-// @description  Ultra fast auto closer -BTC-Trader @yannaingko2
+// @description  Ultra fast auto closer with license key validation - BTC-Trader @yannaingko2
 // @author       BTC-Trader
 // @match        https://www.binance.com/*
 // @grant        GM_setValue
@@ -11,4 +11,1156 @@
 // @grant        GM_xmlhttpRequest
 // @run-at       document-end
 // ==/UserScript==
-function _0x289f(_0x146bf5,_0x15ee2d){const _0x369cff=_0x369c();return _0x289f=function(_0x289f06,_0x4d16c4){_0x289f06=_0x289f06-0xb6;let _0x5673ff=_0x369cff[_0x289f06];return _0x5673ff;},_0x289f(_0x146bf5,_0x15ee2d);}(function(_0x1cc40d,_0x48c7fd){const _0x10cc0a=_0x289f,_0x1c414b=_0x1cc40d();while(!![]){try{const _0x26026f=-parseInt(_0x10cc0a(0x193))/0x1*(-parseInt(_0x10cc0a(0xe0))/0x2)+-parseInt(_0x10cc0a(0x1b3))/0x3+parseInt(_0x10cc0a(0x1ba))/0x4*(-parseInt(_0x10cc0a(0x1fb))/0x5)+parseInt(_0x10cc0a(0x115))/0x6+parseInt(_0x10cc0a(0x1aa))/0x7*(parseInt(_0x10cc0a(0x1d3))/0x8)+-parseInt(_0x10cc0a(0xea))/0x9+-parseInt(_0x10cc0a(0x1f1))/0xa;if(_0x26026f===_0x48c7fd)break;else _0x1c414b['push'](_0x1c414b['shift']());}catch(_0x2997fe){_0x1c414b['push'](_0x1c414b['shift']());}}}(_0x369c,0xc851c),(function(){'use strict';const _0xf82ae3=_0x289f;function _0x2bef9e(_0x32c818,_0x49d365=_0xf82ae3(0xbf)){const _0x15271b=_0xf82ae3,_0x1a56f4=new Date()[_0x15271b(0x151)](),_0x43b0ad='['+_0x1a56f4+']\x20'+_0x32c818;if(_0x49d365===_0x15271b(0x1f8))console['error']('❌',_0x43b0ad);else{if(_0x49d365===_0x15271b(0x157))console[_0x15271b(0xd9)]('✅',_0x43b0ad);else _0x49d365===_0x15271b(0x10e)?console[_0x15271b(0x1b8)]('⚠️',_0x43b0ad):console[_0x15271b(0xd9)]('🔧',_0x43b0ad);}_0x190ada(_0x32c818,_0x49d365);}_0x2bef9e(_0xf82ae3(0xd2));const _0x470fba={'CHECK_INTERVAL':0x5,'DELAY_BETWEEN_CLICKS':0x2,'MODAL_WAIT_TIME':0x14,'REFRESH_DELAY':0xbb8,'ERROR_RETRY_DELAY':0x1f4,'IDLE_REFRESH_TIMEOUT':0x493e0,'POSITIONS_TAB_RETRY_DELAY':0xc8,'POPUP_WAIT_TIME':0xf,'MAX_ERROR_COUNT':0xa,'POSITION_PROCESS_DELAY':0xa,'SAFETY_DELAY':0x32,'SETTLE_CHECK_ATTEMPTS':0x1,'SETTLE_CHECK_DELAY':0xa,'CONFIRM_CHECK_ATTEMPTS':0x1,'CONFIRM_CHECK_DELAY':0xa,'RETRY_ATTEMPTS':0x1},_0x32a390={0x0:{'name':'BTC/USDT','category':_0xf82ae3(0xc2),'pairs':[_0xf82ae3(0x127)]},0x1:{'name':_0xf82ae3(0x1cb),'category':_0xf82ae3(0x199),'pairs':[_0xf82ae3(0x166),'AAVEBTC',_0xf82ae3(0x10a),'AGLDBTC',_0xf82ae3(0xe7),_0xf82ae3(0x112),'ARBBTC',_0xf82ae3(0x16c),_0xf82ae3(0x1ec),_0xf82ae3(0x13f),_0xf82ae3(0x183),_0xf82ae3(0x215),_0xf82ae3(0x176),_0xf82ae3(0x18b),_0xf82ae3(0x1af)]},0x2:{'name':'Group\x202','category':_0xf82ae3(0xe3),'pairs':['BCHBTC',_0xf82ae3(0x156),'CAKEBTC',_0xf82ae3(0x100),_0xf82ae3(0x143),_0xf82ae3(0x11f),'CHZBTC','COMPBTC',_0xf82ae3(0x1a7),'CRVBTC',_0xf82ae3(0xda),'CTSIBTC','DASHBTC',_0xf82ae3(0x17e),_0xf82ae3(0xe8)]},0x3:{'name':_0xf82ae3(0xfa),'category':_0xf82ae3(0x141),'pairs':[_0xf82ae3(0x132),_0xf82ae3(0xdf),_0xf82ae3(0x1c9),'EGLDBTC',_0xf82ae3(0x205),_0xf82ae3(0x207),_0xf82ae3(0xe6),_0xf82ae3(0x1e8),_0xf82ae3(0x1b6),_0xf82ae3(0x1c8),_0xf82ae3(0x18d),_0xf82ae3(0xfe),_0xf82ae3(0xc7),'HBARBTC','INJBTC']},0x4:{'name':'Group\x204','category':_0xf82ae3(0x1b1),'pairs':[_0xf82ae3(0x179),'JSTBTC','KAVABTC',_0xf82ae3(0xfd),_0xf82ae3(0xed),'SNXBTC',_0xf82ae3(0xee),_0xf82ae3(0x20c),_0xf82ae3(0x154),_0xf82ae3(0x102),_0xf82ae3(0xc9),_0xf82ae3(0xc0),_0xf82ae3(0x18f),'GLMBTC',_0xf82ae3(0x155)]},0x5:{'name':_0xf82ae3(0x1f9),'category':_0xf82ae3(0x189),'pairs':[_0xf82ae3(0x203),_0xf82ae3(0x131),'IDBTC',_0xf82ae3(0x11b),'KNCBTC','KSMBTC','LINKBTC',_0xf82ae3(0xba),_0xf82ae3(0x1d2),_0xf82ae3(0x14b),_0xf82ae3(0x13d),'MINABTC','MOVRBTC',_0xf82ae3(0x15f),_0xf82ae3(0x20a)]},0x6:{'name':_0xf82ae3(0x1a5),'category':_0xf82ae3(0x11c),'pairs':[_0xf82ae3(0x146),_0xf82ae3(0x1b0),_0xf82ae3(0x1c4),_0xf82ae3(0x195),'ONGBTC',_0xf82ae3(0x101),_0xf82ae3(0x14d),'PEOPLEBTC',_0xf82ae3(0x144),'PYRBTC',_0xf82ae3(0x19c),'RAREBTC',_0xf82ae3(0xdb),_0xf82ae3(0x149),_0xf82ae3(0x142)]},0x7:{'name':'Group\x207','category':_0xf82ae3(0x177),'pairs':[_0xf82ae3(0x1ed),'SANDBTC',_0xf82ae3(0x1a9),_0xf82ae3(0x186),_0xf82ae3(0x16b),_0xf82ae3(0x197),_0xf82ae3(0x1a2),'SUPERBTC',_0xf82ae3(0x125),'SYSBTC','THETABTC',_0xf82ae3(0x1f4),_0xf82ae3(0x163),_0xf82ae3(0x1d8),_0xf82ae3(0xbb)]},0x8:{'name':_0xf82ae3(0x16d),'category':_0xf82ae3(0x202),'pairs':[_0xf82ae3(0x1de),_0xf82ae3(0x1e7),_0xf82ae3(0xe2),_0xf82ae3(0x169),_0xf82ae3(0x145),_0xf82ae3(0x1f2),'YGGBTC',_0xf82ae3(0x160),_0xf82ae3(0x18e)]}},_0x542d00={'dark':{'background':_0xf82ae3(0xe4),'text':_0xf82ae3(0x1e3),'border':_0xf82ae3(0x139),'panelBg':_0xf82ae3(0x1f5),'secondary':_0xf82ae3(0x1e6)},'light':{'background':_0xf82ae3(0x13b),'text':'#1e2026','border':_0xf82ae3(0x139),'panelBg':_0xf82ae3(0x1a1),'secondary':'#6c757d'},'blue':{'background':_0xf82ae3(0x1d4),'text':_0xf82ae3(0xc4),'border':'#2172e5','panelBg':_0xf82ae3(0x1c2),'secondary':'#6c8ab3'}};let _0xcda260=![],_0x4f14de=new Set(),_0x38e6c5=0x0,_0x2305ac=0x0,_0x5cb809=0x0,_0x1a0971=Date[_0xf82ae3(0x162)](),_0x2614a3=null,_0x230ff6=0x0,_0xc34be5=_0xf82ae3(0xf7),_0x90f891=null,_0x427147='',_0xcd818c=null,_0x30cb76=GM_getValue('panelTheme',_0xf82ae3(0xca)),_0x40855b=null,_0x3ac9a0=0x0,_0x497e50=0x0,_0x50f050=0x0;function _0x337797(){const _0x8e8888=_0xf82ae3,_0x2d6025=[];for(const _0x35d81f of Object['values'](_0x32a390)){_0x2d6025[_0x8e8888(0x210)](..._0x35d81f[_0x8e8888(0xef)]);}return[...new Set(_0x2d6025)][_0x8e8888(0x181)]();}function _0x6fc949(){const _0x2c798e=_0xf82ae3;_0x2bef9e('Initializing\x20Ultra\x20Fast\x20Version...');const _0x2f5637=GM_getValue(_0x2c798e(0x109),null),_0x2e85dd=GM_getValue(_0x2c798e(0x103),_0x2c798e(0xf7)),_0x404b45=GM_getValue('selectedSinglePair',null);_0x2614a3=_0x2f5637,_0xc34be5=_0x2e85dd,_0x90f891=_0x404b45,_0x5beee6(),_0x502d32(),_0x3a5dcd(),_0x190ada(_0x2c798e(0x213),_0x2c798e(0xbf)),_0x2f25c4(),_0x2bef9e(_0x2c798e(0x1bc),_0x2c798e(0x157)),_0x555b65();}function _0x555b65(){const _0x50b5a9=_0xf82ae3;document['body'][_0x50b5a9(0x12d)][_0x50b5a9(0x200)]=_0x50b5a9(0x1b5),_0x2bef9e('Browser\x20zoom\x20optimized\x20for\x20better\x20visibility',_0x50b5a9(0xbf));}function _0x3a5dcd(){if(_0x40855b)clearInterval(_0x40855b);_0x40855b=setInterval(()=>{_0x3ac9a0=(_0x3ac9a0+0x1)%0x2,_0x32335c();},0xbb8);}function _0x32335c(){const _0x411b00=_0xf82ae3,_0x5e97b9=document[_0x411b00(0x10b)](_0x411b00(0x1f3)),_0x24196f=[_0x411b00(0x1d7),_0x411b00(0x136)];_0x5e97b9&&(_0x5e97b9[_0x411b00(0x15a)]=_0x24196f[_0x3ac9a0],_0x5e97b9[_0x411b00(0x12d)]['fontWeight']=_0x411b00(0x1dc),_0x5e97b9[_0x411b00(0x12d)]['color']=_0x542d00[_0x30cb76]['border'],_0x5e97b9[_0x411b00(0x12d)][_0x411b00(0x1d0)]=_0x411b00(0x11a),_0x5e97b9[_0x411b00(0x12d)][_0x411b00(0x1a4)]=_0x411b00(0xf6));}function _0x5beee6(){const _0x5ddf6b=_0xf82ae3,_0x187d4d=document[_0x5ddf6b(0x10b)](_0x5ddf6b(0x1ce));_0x187d4d&&_0x187d4d[_0x5ddf6b(0x114)]();const _0x556c2f=_0x542d00[_0x30cb76],_0x410344=document[_0x5ddf6b(0x1e2)](_0x5ddf6b(0x134));_0x410344['id']=_0x5ddf6b(0x1ce),_0x410344[_0x5ddf6b(0x12d)][_0x5ddf6b(0x174)]=_0x5ddf6b(0x1f6)+_0x556c2f[_0x5ddf6b(0x1b4)]+';\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20border:\x202px\x20solid\x20'+_0x556c2f[_0x5ddf6b(0xd4)]+';\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20border-radius:\x2010px;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20padding:\x2015px;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20color:\x20'+_0x556c2f[_0x5ddf6b(0x1da)]+';\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20font-family:\x20-apple-system,\x20BlinkMacSystemFont,\x20\x27Segoe\x20UI\x27,\x20Roboto,\x20sans-serif;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20min-width:\x20450px;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20max-width:\x20450px;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20box-shadow:\x200\x206px\x2025px\x20rgba(0,0,0,0.8);\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20font-size:\x2013px;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20max-height:\x2075vh;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20overflow-y:\x20auto;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20transform:\x20scale(0.95);\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20transform-origin:\x20top\x20right;\x0a\x20\x20\x20\x20\x20\x20\x20\x20';const _0x43f3bb=_0x337797();_0x410344[_0x5ddf6b(0x18c)]='\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20style=\x22text-align:\x20center;\x20margin-bottom:\x2015px;\x20padding-bottom:\x2010px;\x20border-bottom:\x201px\x20solid\x20'+_0x556c2f[_0x5ddf6b(0xd4)]+_0x5ddf6b(0x1ff)+_0x556c2f[_0x5ddf6b(0xd4)]+_0x5ddf6b(0x17c)+_0x556c2f['secondary']+_0x5ddf6b(0x107)+_0x556c2f[_0x5ddf6b(0x178)]+_0x5ddf6b(0x14e)+_0x556c2f[_0x5ddf6b(0xd4)]+';\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20🟢\x20Ready\x20-\x20Select\x20mode\x20and\x20click\x20START\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<!--\x20Speed\x20Stats\x20-->\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20style=\x22background:\x20'+_0x556c2f[_0x5ddf6b(0x178)]+_0x5ddf6b(0x1cc)+_0x556c2f[_0x5ddf6b(0xf1)]+_0x5ddf6b(0x17b)+_0x556c2f[_0x5ddf6b(0xd4)]+_0x5ddf6b(0x204)+_0x556c2f[_0x5ddf6b(0xf1)]+';\x22>Time\x20Elapsed</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20id=\x22time-elapsed\x22\x20style=\x22font-size:\x2014px;\x20font-weight:\x20bold;\x20color:\x20#0ecb81;\x22>0s</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<!--\x20Main\x20Control\x20Buttons\x20Row\x20-->\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20style=\x22display:\x20grid;\x20grid-template-columns:\x201fr\x201fr\x201fr;\x20gap:\x208px;\x20margin-bottom:\x2015px;\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20id=\x22start-btn\x22\x20style=\x22padding:\x2012px;\x20background:\x20linear-gradient(135deg,\x20#0ecb81,\x20#0a8);\x20color:\x20white;\x20border:\x20none;\x20border-radius:\x206px;\x20cursor:\x20pointer;\x20font-weight:\x20bold;\x20font-size:\x2012px;\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20🚀\x20START\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20id=\x22refresh-btn\x22\x20style=\x22padding:\x2012px;\x20background:\x20linear-gradient(135deg,\x20#f0b90b,\x20#d99c00);\x20color:\x20black;\x20border:\x20none;\x20border-radius:\x206px;\x20cursor:\x20pointer;\x20font-weight:\x20bold;\x20font-size:\x2012px;\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20🔄\x20REFRESH\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20id=\x22activate-tab-btn\x22\x20style=\x22padding:\x2012px;\x20background:\x20linear-gradient(135deg,\x20#2172e5,\x20#0052cc);\x20color:\x20white;\x20border:\x20none;\x20border-radius:\x206px;\x20cursor:\x20pointer;\x20font-weight:\x20bold;\x20font-size:\x2012px;\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20📍\x20ACTIVATE\x20TAB\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20id=\x22stop-btn\x22\x20style=\x22width:\x20100%;\x20padding:\x2012px;\x20background:\x20linear-gradient(135deg,\x20#ea3943,\x20#c00);\x20color:\x20white;\x20border:\x20none;\x20border-radius:\x206px;\x20cursor:\x20pointer;\x20font-weight:\x20bold;\x20font-size:\x2012px;\x20margin-bottom:\x2015px;\x20display:\x20none;\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20🛑\x20STOP\x20AUTO\x20CLOSER\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<!--\x20Stats\x20Panel\x20-->\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20style=\x22background:\x20'+_0x556c2f[_0x5ddf6b(0x178)]+_0x5ddf6b(0xb7)+_0x556c2f[_0x5ddf6b(0xf1)]+';\x22>Active\x20Positions</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20id=\x22position-count\x22\x20style=\x22font-size:\x2016px;\x20font-weight:\x20bold;\x20color:\x20'+_0x556c2f[_0x5ddf6b(0xd4)]+_0x5ddf6b(0xdc)+_0x556c2f[_0x5ddf6b(0xf1)]+_0x5ddf6b(0xb6)+_0x556c2f['secondary']+_0x5ddf6b(0x1e1)+_0x556c2f[_0x5ddf6b(0x1da)]+_0x5ddf6b(0x1c1)+_0x556c2f[_0x5ddf6b(0xf1)]+_0x5ddf6b(0x1ab)+_0x470fba['MAX_ERROR_COUNT']+'</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20style=\x22margin-top:\x208px;\x20padding-top:\x208px;\x20border-top:\x201px\x20solid\x20'+_0x556c2f[_0x5ddf6b(0xf1)]+_0x5ddf6b(0x12f)+_0x556c2f[_0x5ddf6b(0xf1)]+_0x5ddf6b(0xf0)+_0x556c2f['text']+_0x5ddf6b(0x211)+_0x556c2f['secondary']+_0x5ddf6b(0xf3)+_0x556c2f[_0x5ddf6b(0xd4)]+_0x5ddf6b(0x1db)+_0x556c2f['secondary']+_0x5ddf6b(0xcf)+(_0xc34be5===_0x5ddf6b(0xf7)?'#3a3221':_0x556c2f['panelBg'])+_0x5ddf6b(0x108)+(_0xc34be5===_0x5ddf6b(0xf7)?_0x5ddf6b(0x139):_0x556c2f[_0x5ddf6b(0xf1)])+';\x20border:\x202px\x20solid\x20'+(_0xc34be5==='single'?_0x5ddf6b(0x139):_0x556c2f[_0x5ddf6b(0xf1)])+_0x5ddf6b(0x1df)+(_0xc34be5===_0x5ddf6b(0x117)?'#3a243b':_0x556c2f['panelBg'])+_0x5ddf6b(0x108)+(_0xc34be5===_0x5ddf6b(0x117)?_0x5ddf6b(0x1e3):_0x556c2f[_0x5ddf6b(0xf1)])+_0x5ddf6b(0xfc)+(_0xc34be5===_0x5ddf6b(0x117)?_0x5ddf6b(0x10f):_0x556c2f[_0x5ddf6b(0xf1)])+_0x5ddf6b(0x1cf)+_0x556c2f['secondary']+_0x5ddf6b(0xc8)+_0x556c2f[_0x5ddf6b(0x178)]+_0x5ddf6b(0x108)+_0x556c2f[_0x5ddf6b(0x1da)]+';\x20border:\x201px\x20solid\x20'+_0x556c2f[_0x5ddf6b(0xf1)]+';\x20font-size:\x2012px;\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<option\x20value=\x22\x22>--\x20Select\x20Trading\x20Group\x20--</option>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20'+Object[_0x5ddf6b(0x150)](_0x32a390)['map'](([_0xb521b6,_0x51e7fd])=>_0x5ddf6b(0x20b)+_0xb521b6+'\x22\x20'+(_0x2614a3!==null&&parseInt(_0xb521b6)===_0x2614a3?_0x5ddf6b(0x165):'')+_0x5ddf6b(0x123)+_0xb521b6+']\x20'+_0x51e7fd['name']+_0x5ddf6b(0xec)+_0x51e7fd['pairs']['length']+_0x5ddf6b(0x130))[_0x5ddf6b(0xd5)]('')+'\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</select>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<!--\x20Single\x20Pair\x20Selection\x20-->\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20style=\x22margin-bottom:\x2015px;\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<label\x20style=\x22display:\x20block;\x20margin-bottom:\x206px;\x20font-size:\x2011px;\x20color:\x20'+_0x556c2f[_0x5ddf6b(0xf1)]+';\x20font-weight:\x20bold;\x22>🎯\x20SELECT\x20SINGLE\x20PAIR:</label>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<select\x20id=\x22single-pair-select\x22\x20style=\x22width:\x20100%;\x20padding:\x208px;\x20border-radius:\x205px;\x20background:\x20'+_0x556c2f[_0x5ddf6b(0x178)]+_0x5ddf6b(0x108)+_0x556c2f[_0x5ddf6b(0x1da)]+_0x5ddf6b(0x12c)+_0x556c2f[_0x5ddf6b(0xf1)]+_0x5ddf6b(0x1be)+_0x43f3bb['map'](_0x3b115e=>_0x5ddf6b(0x20b)+_0x3b115e+'\x22\x20'+(_0x90f891===_0x3b115e?_0x5ddf6b(0x165):'')+'>'+_0x3b115e+'</option>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20')[_0x5ddf6b(0xd5)]('')+_0x5ddf6b(0x206)+_0x556c2f[_0x5ddf6b(0x178)]+';\x20padding:\x2010px;\x20border-radius:\x205px;\x20text-align:\x20center;\x20margin-bottom:\x2012px;\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20style=\x22font-size:\x2010px;\x20color:\x20'+_0x556c2f[_0x5ddf6b(0xf1)]+_0x5ddf6b(0x1ca)+_0x556c2f[_0x5ddf6b(0xf1)]+_0x5ddf6b(0xbc)+_0x556c2f[_0x5ddf6b(0xd4)]+_0x5ddf6b(0x184)+_0x556c2f[_0x5ddf6b(0x178)]+_0x5ddf6b(0x108)+_0x556c2f[_0x5ddf6b(0x1da)]+_0x5ddf6b(0x12c)+_0x556c2f[_0x5ddf6b(0xf1)]+_0x5ddf6b(0xcc)+_0x556c2f[_0x5ddf6b(0x178)]+_0x5ddf6b(0x108)+_0x556c2f[_0x5ddf6b(0x1da)]+';\x20border:\x201px\x20solid\x20'+_0x556c2f[_0x5ddf6b(0xf1)]+_0x5ddf6b(0x119)+(_0x30cb76===_0x5ddf6b(0xca)?_0x5ddf6b(0x165):'')+_0x5ddf6b(0x133)+(_0x30cb76===_0x5ddf6b(0x1ac)?_0x5ddf6b(0x165):'')+_0x5ddf6b(0x19f)+(_0x30cb76==='blue'?_0x5ddf6b(0x165):'')+_0x5ddf6b(0x175);try{document['body'][_0x5ddf6b(0x1fe)](_0x410344),_0x2bef9e(_0x5ddf6b(0x153),'success'),setTimeout(()=>{_0x5af35b();},0x32);}catch(_0x36a5b4){_0x2bef9e(_0x5ddf6b(0x214)+_0x36a5b4,'error');}}function _0x5af35b(){const _0x75be21=_0xf82ae3;try{document[_0x75be21(0x10b)]('start-btn')[_0x75be21(0x15c)](_0x75be21(0xcd),_0x275cad),document[_0x75be21(0x10b)]('stop-btn')['addEventListener'](_0x75be21(0xcd),_0x3f8f09),document['getElementById'](_0x75be21(0x104))[_0x75be21(0x15c)](_0x75be21(0xcd),_0x48eb3c),document['getElementById'](_0x75be21(0xfb))['addEventListener']('click',_0x421597),document[_0x75be21(0x10b)](_0x75be21(0x1dd))[_0x75be21(0x15c)]('click',_0x2c045f),document[_0x75be21(0x10b)](_0x75be21(0x1e9))[_0x75be21(0x15c)](_0x75be21(0x106),function(_0x382ab2){const _0x3ae1ad=_0x75be21;_0x2614a3=_0x382ab2[_0x3ae1ad(0x16e)][_0x3ae1ad(0x1c7)]===''?null:parseInt(_0x382ab2[_0x3ae1ad(0x16e)]['value']),GM_setValue(_0x3ae1ad(0x109),_0x2614a3),_0x230ff6=0x0,_0x2b5f6c(),_0x91e880(),_0x2bef9e(_0x3ae1ad(0x19b)+(_0x2614a3!==null?_0x32a390[_0x2614a3][_0x3ae1ad(0x190)]:'None'));}),document[_0x75be21(0x10b)](_0x75be21(0x10c))[_0x75be21(0x15c)]('change',function(_0x436ba9){const _0x44e196=_0x75be21;_0x90f891=_0x436ba9[_0x44e196(0x16e)][_0x44e196(0x1c7)]===''?null:_0x436ba9['target']['value'],GM_setValue(_0x44e196(0x16a),_0x90f891),_0x2b5f6c(),_0x91e880(),_0x2bef9e(_0x44e196(0x14c)+(_0x90f891||_0x44e196(0x19a)));}),document[_0x75be21(0x10b)]('multiple-mode-btn')['addEventListener']('click',function(){const _0x56a9c9=_0x75be21;_0x126b92(_0x56a9c9(0xf7));}),document[_0x75be21(0x10b)](_0x75be21(0xd0))['addEventListener']('click',function(){const _0x4466c1=_0x75be21;_0x126b92(_0x4466c1(0x117));}),document['getElementById'](_0x75be21(0x18a))[_0x75be21(0x15c)](_0x75be21(0x106),function(_0x9caeea){const _0x203376=_0x75be21;_0x30cb76=_0x9caeea[_0x203376(0x16e)][_0x203376(0x1c7)],GM_setValue(_0x203376(0x172),_0x30cb76),_0x5beee6(),_0x3a5dcd(),_0x2bef9e(_0x203376(0xff)+_0x30cb76);}),document['addEventListener']('keydown',function(_0x58df81){const _0x1f3b7e=_0x75be21;_0x58df81[_0x1f3b7e(0xf2)]===_0x1f3b7e(0x182)&&(_0x2bef9e(_0x1f3b7e(0x11e)),_0x3f8f09());}),_0x2b5f6c(),_0x580b7a(),_0x91e880(),_0x2f25c4();}catch(_0xfc640d){_0x2bef9e(_0x75be21(0x187)+_0xfc640d,_0x75be21(0x1f8));}}function _0x9387bc(){const _0x269fb3=_0xf82ae3,_0x5848fa=document[_0x269fb3(0x10b)](_0x269fb3(0x20f)),_0x3794d9=document[_0x269fb3(0x10b)](_0x269fb3(0x1e4));if(_0x5848fa)_0x5848fa[_0x269fb3(0x15a)]=_0x50f050;if(_0x3794d9&&_0x497e50>0x0){const _0x1e2465=Math[_0x269fb3(0x1ae)]((Date[_0x269fb3(0x162)]()-_0x497e50)/0x3e8);_0x3794d9[_0x269fb3(0x15a)]=_0x1e2465+'s';}}function _0x55254e(){const _0x7a2c87=_0xf82ae3,_0x549dbd=[];try{const _0x29af9e=[_0x7a2c87(0xc3),_0x7a2c87(0x17a),_0x7a2c87(0x1d6),_0x7a2c87(0x1eb)],_0x1690ae=document[_0x7a2c87(0x1f7)]('button,\x20div,\x20span');for(let _0x5a7588 of _0x1690ae){try{if(_0x5a7588[_0x7a2c87(0x15a)]&&_0x5a7588[_0x7a2c87(0xde)]&&_0x1fd248(_0x5a7588)){const _0x16e0a8=_0x5a7588[_0x7a2c87(0x15a)]['trim']();if(_0x29af9e[_0x7a2c87(0x198)](_0x570dec=>_0x16e0a8===_0x570dec)){const _0x52941d=_0x54329f(_0x5a7588);!_0x4f14de[_0x7a2c87(0x158)](_0x52941d)&&_0x549dbd[_0x7a2c87(0x210)]({'element':_0x5a7588,'button':_0x5a7588,'id':_0x52941d});}}}catch(_0x20f240){}}}catch(_0x23bb85){_0x2bef9e(_0x7a2c87(0x1a6)+_0x23bb85,_0x7a2c87(0x1f8));}return _0x549dbd;}function _0x7d2ac(){const _0x3c9023=_0xf82ae3;try{const _0x3e1077=document[_0x3c9023(0x1f7)]('button,\x20div,\x20span');for(let _0x314d8e of _0x3e1077){if(_0x314d8e[_0x3c9023(0x15a)]&&_0x314d8e[_0x3c9023(0xde)]&&_0x1fd248(_0x314d8e)){const _0x374938=_0x314d8e[_0x3c9023(0x15a)][_0x3c9023(0x1ef)]()[_0x3c9023(0xcb)]();if(_0x374938[_0x3c9023(0x17d)](_0x3c9023(0x167))&&_0x374938[_0x3c9023(0x17d)](_0x3c9023(0x124)))return _0x314d8e;}}}catch(_0x40d89c){_0x2bef9e(_0x3c9023(0x164)+_0x40d89c,'error');}return null;}function _0x5e4b0f(){const _0x17c2bc=_0xf82ae3;try{const _0x4e7f4e=[_0x17c2bc(0x1a3),'button[class*=\x22confirm\x22\x20i]','button[class*=\x22primary\x22\x20i]','[data-testid*=\x22confirm\x22\x20i]'],_0x4a04c2=document[_0x17c2bc(0x1f7)](_0x17c2bc(0x13c));for(let _0x3df0d9 of _0x4a04c2){for(let _0x233ebf of _0x4e7f4e){try{const _0x352fb2=_0x3df0d9[_0x17c2bc(0x1f7)](_0x233ebf);for(let _0x5527c7 of _0x352fb2){if(_0x5527c7['isConnected']&&_0x1fd248(_0x5527c7))return _0x5527c7;}}catch(_0x1f1d00){}}}for(let _0x595c18 of _0x4e7f4e){try{const _0x3ce630=document[_0x17c2bc(0x1f7)](_0x595c18);for(let _0x5cb46e of _0x3ce630){if(_0x5cb46e[_0x17c2bc(0xde)]&&_0x1fd248(_0x5cb46e))return _0x5cb46e;}}catch(_0x19cb19){}}}catch(_0x5b0a1e){_0x2bef9e(_0x17c2bc(0x1bb)+_0x5b0a1e,_0x17c2bc(0x1f8));}return null;}function _0x15d9d4(_0x2dc71e,_0xf4fe5d){const _0x474758=_0xf82ae3;try{if(_0x2dc71e&&_0x2dc71e[_0x474758(0xde)]&&_0x1fd248(_0x2dc71e)){_0x2dc71e[_0x474758(0x12e)]({'behavior':_0x474758(0x118),'block':_0x474758(0x196),'inline':_0x474758(0x1c5)});const _0x13ec50=[()=>{const _0x2b05e4=_0x474758;if(typeof _0x2dc71e[_0x2b05e4(0xcd)]===_0x2b05e4(0xd6))_0x2dc71e[_0x2b05e4(0xcd)]();},()=>{const _0x50fb45=_0x474758,_0x4b1058=new MouseEvent('click',{'view':window,'bubbles':!![],'cancelable':!![]});_0x2dc71e[_0x50fb45(0x1ee)](_0x4b1058);}];for(let _0x11e2d3 of _0x13ec50){try{_0x11e2d3();}catch(_0x4265fc){}}return _0x2bef9e(_0x474758(0x1d5)+_0xf4fe5d),!![];}return![];}catch(_0x462095){return _0x2bef9e(_0x474758(0x1cd)+_0xf4fe5d+':\x20'+_0x462095,_0x474758(0x1f8)),![];}}function _0x1fd248(_0x1c4317){const _0x47e239=_0xf82ae3;if(!_0x1c4317)return![];try{const _0x3560c0=window['getComputedStyle'](_0x1c4317);return _0x3560c0[_0x47e239(0x1ea)]!==_0x47e239(0x1bd)&&_0x3560c0[_0x47e239(0xe9)]!==_0x47e239(0x1f0)&&_0x1c4317[_0x47e239(0x208)]!==null&&_0x1c4317[_0x47e239(0xd7)]>0x0&&_0x1c4317['offsetHeight']>0x0;}catch(_0x21acca){return![];}}function _0x7f60d0(_0x2f9c23,_0x4931ca,_0x173a7b){const _0x433d2f=_0xf82ae3,_0x4a7010=_0x7d2ac();if(_0x4a7010&&_0x15d9d4(_0x4a7010,_0x433d2f(0xd3)))setTimeout(()=>{const _0x501e4f=_0x433d2f,_0x1beb6f=_0x5e4b0f();_0x1beb6f&&_0x15d9d4(_0x1beb6f,'Confirm')?setTimeout(()=>_0x4931ca(),_0x470fba[_0x501e4f(0x120)]):_0x4931ca();},_0x470fba[_0x433d2f(0x159)]);else{const _0x388406=_0x5e4b0f();_0x388406&&_0x15d9d4(_0x388406,_0x433d2f(0x110))?setTimeout(()=>_0x4931ca(),_0x470fba[_0x433d2f(0x120)]):_0x4931ca();}}function _0x4afe06(_0x2095fc,_0x56ca93,_0x44ac99=0x0){const _0x169ee1=_0xf82ae3;if(!_0xcda260)return;if(_0x56ca93>=_0x2095fc[_0x169ee1(0x191)]){_0x190ada(_0x169ee1(0x185),_0x169ee1(0x157)),_0x5e76bd();return;}const _0x528cc6=_0x2095fc[_0x56ca93],_0x5514ce=_0x32a390[_0x2614a3]['pairs'][_0x230ff6];_0x190ada('Closing\x20position\x20'+(_0x56ca93+0x1)+'/'+_0x2095fc['length']+_0x169ee1(0x17f)+_0x5514ce+_0x169ee1(0x15e),_0x169ee1(0x10e));if(!_0x528cc6[_0x169ee1(0x10d)][_0x169ee1(0xde)]){_0x4f14de[_0x169ee1(0x171)](_0x528cc6['id']),setTimeout(()=>_0x4afe06(_0x2095fc,_0x56ca93+0x1),0x1);return;}_0x15d9d4(_0x528cc6['button'],'Close\x20Position\x20button')?setTimeout(()=>{if(!_0xcda260)return;_0x7f60d0(_0x528cc6,()=>{const _0x624279=_0x289f;_0x4f14de[_0x624279(0x171)](_0x528cc6['id']),_0x2305ac++,_0x5cb809=Math[_0x624279(0x128)](0x0,_0x5cb809-0x1),_0xe8f5a1(),_0x190ada(_0x624279(0x212)+(_0x56ca93+0x1)+_0x624279(0x138)+_0x5514ce,'success'),_0x1a0971=Date[_0x624279(0x162)](),setTimeout(()=>_0x4afe06(_0x2095fc,_0x56ca93+0x1),_0x470fba[_0x624279(0x147)]);},()=>{const _0x4fee6a=_0x289f;_0x4f14de[_0x4fee6a(0x171)](_0x528cc6['id']),setTimeout(()=>_0x4afe06(_0x2095fc,_0x56ca93+0x1),_0x470fba[_0x4fee6a(0x147)]);});},_0x470fba['MODAL_WAIT_TIME']):(_0x4f14de[_0x169ee1(0x171)](_0x528cc6['id']),setTimeout(()=>_0x4afe06(_0x2095fc,_0x56ca93+0x1),_0x470fba[_0x169ee1(0x147)]));}function _0x54329f(_0x3f0095){const _0x7d444f=_0xf82ae3,_0x3cd70f=_0x3f0095[_0x7d444f(0x116)](),_0x2ec102=_0x3f0095[_0x7d444f(0x15a)]||'';return(_0x2ec102+'-'+_0x3cd70f['top']+'-'+_0x3cd70f[_0x7d444f(0x1d1)]+'-'+Date[_0x7d444f(0x162)]())[_0x7d444f(0xf5)](/\s+/g,'_');}function _0x5e76bd(){const _0x4c302c=_0xf82ae3;_0x50f050++,_0x9387bc();if(_0xc34be5==='single'&&_0x2614a3!==null&&_0x230ff6<_0x32a390[_0x2614a3][_0x4c302c(0xef)][_0x4c302c(0x191)]-0x1){_0x230ff6++,_0x2b5f6c();const _0x407b1b=_0x32a390[_0x2614a3]['pairs'][_0x230ff6];_0x2bef9e(_0x4c302c(0x1a0)+_0x407b1b),_0x190ada(_0x4c302c(0x1a0)+_0x407b1b,'info'),setTimeout(()=>{_0xcda260&&_0x329900();},_0x470fba[_0x4c302c(0x1fd)]);}else _0xc34be5===_0x4c302c(0xf7)&&_0x2614a3!==null&&_0x230ff6>=_0x32a390[_0x2614a3][_0x4c302c(0xef)][_0x4c302c(0x191)]-0x1?(_0x230ff6=0x0,_0x2b5f6c(),_0x2bef9e('Completed\x20group\x20cycle,\x20restarting\x20from\x20first\x20pair'),_0x190ada('Completed\x20group\x20cycle,\x20restarting\x20from\x20first\x20pair',_0x4c302c(0xbf)),setTimeout(()=>{_0xcda260&&_0x329900();},_0x470fba[_0x4c302c(0x1fd)])):setTimeout(()=>{_0xcda260&&_0x329900();},_0x470fba[_0x4c302c(0x1fd)]);}function _0x329900(){const _0x4d3916=_0xf82ae3;if(!_0xcda260)return;try{const _0x14986f=_0x55254e();_0x38e6c5=_0x14986f['length'],_0xe8f5a1();if(_0x14986f['length']===0x0){_0x2bef9e('No\x20Close\x20Position\x20buttons\x20found'),_0x190ada(_0x4d3916(0xb9),'info');if(Date[_0x4d3916(0x162)]()-_0x1a0971>_0x470fba[_0x4d3916(0x188)]){_0x2bef9e(_0x4d3916(0xeb),_0x4d3916(0x10e)),_0x190ada(_0x4d3916(0x19e),_0x4d3916(0x10e)),GM_setValue(_0x4d3916(0x12a),!![]),window[_0x4d3916(0x201)][_0x4d3916(0xc1)]();return;}_0x5e76bd();}else{let _0x3bf4c0=_0xc34be5==='single'?_0x32a390[_0x2614a3][_0x4d3916(0xef)][_0x230ff6]:_0x90f891;_0x2bef9e(_0x4d3916(0x19d)+_0x14986f['length']+'\x20positions\x20for\x20'+_0x3bf4c0,_0x4d3916(0x157)),_0x190ada(_0x4d3916(0x19d)+_0x14986f[_0x4d3916(0x191)]+'\x20positions\x20for\x20'+_0x3bf4c0+_0x4d3916(0x1ad),_0x4d3916(0x10e)),_0x1a0971=Date[_0x4d3916(0x162)](),_0x4afe06(_0x14986f,0x0);}}catch(_0xf94d83){_0x47b965('Error\x20during\x20position\x20scanning:\x20'+_0xf94d83);}}function _0x5af35b(){const _0x5bd693=_0xf82ae3;try{document[_0x5bd693(0x10b)](_0x5bd693(0x152))[_0x5bd693(0x15c)](_0x5bd693(0xcd),_0x275cad),document[_0x5bd693(0x10b)](_0x5bd693(0x1e5))[_0x5bd693(0x15c)]('click',_0x3f8f09),document['getElementById'](_0x5bd693(0x104))[_0x5bd693(0x15c)](_0x5bd693(0xcd),_0x48eb3c),document[_0x5bd693(0x10b)](_0x5bd693(0xfb))[_0x5bd693(0x15c)](_0x5bd693(0xcd),_0x421597),document[_0x5bd693(0x10b)]('test-panel-btn')[_0x5bd693(0x15c)](_0x5bd693(0xcd),_0x2c045f),document[_0x5bd693(0x10b)](_0x5bd693(0x1e9))[_0x5bd693(0x15c)]('change',function(_0x27702f){const _0x3d7001=_0x5bd693;_0x2614a3=_0x27702f[_0x3d7001(0x16e)][_0x3d7001(0x1c7)]===''?null:parseInt(_0x27702f[_0x3d7001(0x16e)]['value']),GM_setValue('selectedGroup',_0x2614a3),_0x230ff6=0x0,_0x2b5f6c(),_0x91e880(),_0x2bef9e('Group\x20changed\x20to:\x20'+(_0x2614a3!==null?_0x32a390[_0x2614a3][_0x3d7001(0x190)]:_0x3d7001(0x19a)));}),document['getElementById'](_0x5bd693(0x10c))[_0x5bd693(0x15c)](_0x5bd693(0x106),function(_0x29a48a){const _0x5eb09f=_0x5bd693;_0x90f891=_0x29a48a[_0x5eb09f(0x16e)][_0x5eb09f(0x1c7)]===''?null:_0x29a48a[_0x5eb09f(0x16e)][_0x5eb09f(0x1c7)],GM_setValue(_0x5eb09f(0x16a),_0x90f891),_0x2b5f6c(),_0x91e880(),_0x2bef9e(_0x5eb09f(0x14c)+(_0x90f891||_0x5eb09f(0x19a)));}),document['getElementById'](_0x5bd693(0xe1))[_0x5bd693(0x15c)]('click',function(){const _0x355de3=_0x5bd693;_0x126b92(_0x355de3(0xf7));}),document[_0x5bd693(0x10b)](_0x5bd693(0xd0))[_0x5bd693(0x15c)](_0x5bd693(0xcd),function(){const _0x1dc391=_0x5bd693;_0x126b92(_0x1dc391(0x117));}),document[_0x5bd693(0x10b)](_0x5bd693(0x18a))[_0x5bd693(0x15c)](_0x5bd693(0x106),function(_0x5f2d75){const _0x455056=_0x5bd693;_0x30cb76=_0x5f2d75[_0x455056(0x16e)]['value'],GM_setValue(_0x455056(0x172),_0x30cb76),_0x5beee6(),_0x3a5dcd(),_0x2bef9e(_0x455056(0xff)+_0x30cb76);}),document[_0x5bd693(0x15c)](_0x5bd693(0xd1),function(_0x425c13){const _0x420811=_0x5bd693;_0x425c13[_0x420811(0xf2)]===_0x420811(0x182)&&(_0x2bef9e(_0x420811(0x11e)),_0x3f8f09());}),_0x2b5f6c(),_0x580b7a(),_0x91e880(),_0x2f25c4();}catch(_0x443e10){_0x2bef9e(_0x5bd693(0x187)+_0x443e10,_0x5bd693(0x1f8));}}function _0x2c045f(){const _0x541ac=_0xf82ae3,_0x5bf579=document[_0x541ac(0x10b)](_0x541ac(0x1ce));_0x5bf579&&(_0x5bf579['style'][_0x541ac(0xd4)]=_0x541ac(0xc5),_0x5bf579['style'][_0x541ac(0x148)]=_0x541ac(0x105),setTimeout(()=>{const _0x53fc39=_0x541ac;_0x5bf579[_0x53fc39(0x12d)][_0x53fc39(0xd4)]=_0x53fc39(0x111)+_0x542d00[_0x30cb76]['border'],_0x5bf579['style'][_0x53fc39(0x148)]='0\x208px\x2035px\x20rgba(0,0,0,0.8)';},0x3e8),_0x2bef9e(_0x541ac(0x137),'success'),_0x190ada(_0x541ac(0x137),_0x541ac(0x157)));}function _0x275cad(){const _0x108cc4=_0xf82ae3;_0x2bef9e('Starting\x20auto\x20close\x20process...','success');if(_0xc34be5===_0x108cc4(0xf7)&&_0x2614a3===null){_0x190ada('Please\x20select\x20a\x20trading\x20group\x20first',_0x108cc4(0x1f8));return;}if(_0xc34be5===_0x108cc4(0x117)&&_0x90f891===null){_0x190ada(_0x108cc4(0x129),_0x108cc4(0x1f8));return;}if(!_0xcda260){_0xcda260=!![],_0x497e50=Date[_0x108cc4(0x162)](),_0x50f050=0x0,_0x2bef9e(_0x108cc4(0x14f),'success'),_0x4f14de[_0x108cc4(0x11d)](),_0x38e6c5=0x0,_0x2305ac=0x0,_0x5cb809=0x0,_0x230ff6=0x0,_0x1a0971=Date['now'](),_0x2f25c4(),_0xe8f5a1(),_0x9387bc();switch(_0xc34be5){case _0x108cc4(0xf7):_0x190ada(_0x108cc4(0xb8)+_0x32a390[_0x2614a3][_0x108cc4(0x190)],'success');break;case _0x108cc4(0x117):_0x190ada('Running\x20-\x20Single:\x20'+_0x90f891,_0x108cc4(0x157));break;}setTimeout(()=>{const _0x5b09e8=_0x108cc4;_0x2bef9e(_0x5b09e8(0xf9),_0x5b09e8(0xbf)),_0x421597(),setTimeout(()=>{const _0x5da92e=_0x5b09e8;_0xcda260&&(_0x2bef9e('Step\x202:\x20Starting\x20Position\x20Scan...',_0x5da92e(0xbf)),_0x329900());},0x3e8);},_0x470fba['SAFETY_DELAY']);}else _0x190ada(_0x108cc4(0x126),_0x108cc4(0x10e));}function _0x3f8f09(){const _0x58445d=_0xf82ae3;_0x2bef9e('Stopping\x20auto\x20close\x20process...'),_0xcda260?(_0xcda260=![],_0xcd818c&&(clearInterval(_0xcd818c),_0xcd818c=null),_0x40855b&&(clearInterval(_0x40855b),_0x40855b=null),_0x4f14de['clear'](),_0x337c9f(''),_0x2f25c4(),_0x190ada('Auto\x20closer\x20stopped\x20by\x20user',_0x58445d(0x1f8)),_0x2bef9e('Auto-close\x20process\x20STOPPED',_0x58445d(0x157))):_0x190ada('Auto\x20closer\x20is\x20not\x20running',_0x58445d(0x10e));}function _0x190ada(_0x634d89,_0x1fbf6d=_0xf82ae3(0xbf)){const _0xcfa2ec=_0xf82ae3,_0x489d25=document[_0xcfa2ec(0x10b)]('status-display');if(_0x489d25){_0x489d25[_0xcfa2ec(0x15a)]=_0x634d89;if(_0x1fbf6d==='error')_0x489d25[_0xcfa2ec(0x12d)][_0xcfa2ec(0xe5)]=_0xcfa2ec(0x10f),_0x489d25['style']['color']=_0xcfa2ec(0x10f);else{if(_0x1fbf6d==='success')_0x489d25['style'][_0xcfa2ec(0xe5)]=_0xcfa2ec(0x20e),_0x489d25['style'][_0xcfa2ec(0x192)]=_0xcfa2ec(0x20e);else _0x1fbf6d===_0xcfa2ec(0x10e)?(_0x489d25['style']['borderLeftColor']=_0xcfa2ec(0x139),_0x489d25[_0xcfa2ec(0x12d)]['color']='#f0b90b'):(_0x489d25[_0xcfa2ec(0x12d)][_0xcfa2ec(0xe5)]=_0x542d00[_0x30cb76][_0xcfa2ec(0xd4)],_0x489d25[_0xcfa2ec(0x12d)][_0xcfa2ec(0x192)]=_0x542d00[_0x30cb76]['text']);}}}function _0xe8f5a1(){const _0x4e7e92=_0xf82ae3,_0x48d030=document[_0x4e7e92(0x10b)](_0x4e7e92(0x180)),_0x25b491=document[_0x4e7e92(0x10b)](_0x4e7e92(0x168)),_0x4980de=document[_0x4e7e92(0x10b)]('error-count'),_0x3143c6=document[_0x4e7e92(0x10b)]('current-pair');if(_0x48d030)_0x48d030[_0x4e7e92(0x15a)]=_0x38e6c5;if(_0x25b491)_0x25b491['textContent']=_0x2305ac;if(_0x4980de)_0x4980de[_0x4e7e92(0x15a)]=_0x5cb809+'/'+_0x470fba[_0x4e7e92(0x1fc)];if(_0x3143c6){if(_0xc34be5===_0x4e7e92(0xf7)&&_0x2614a3!==null)_0x3143c6['textContent']=_0x32a390[_0x2614a3]['pairs'][_0x230ff6];else _0xc34be5===_0x4e7e92(0x117)&&_0x90f891?_0x3143c6[_0x4e7e92(0x15a)]=_0x90f891:_0x3143c6[_0x4e7e92(0x15a)]='-';}}function _0x337c9f(_0xdc42ec){const _0x195d05=_0xf82ae3,_0x203ebf=document[_0x195d05(0x10b)](_0x195d05(0x20d));_0x203ebf&&(_0x203ebf[_0x195d05(0x15a)]=_0xdc42ec||'-'),_0x427147=_0xdc42ec;}function _0x2f25c4(){const _0x5f2eda=_0xf82ae3,_0x3e831f=document[_0x5f2eda(0x10b)]('start-btn'),_0x448933=document[_0x5f2eda(0x10b)](_0x5f2eda(0x1e5));if(_0x3e831f)_0x3e831f[_0x5f2eda(0x12d)]['display']=_0xcda260?'none':_0x5f2eda(0x1bf);if(_0x448933)_0x448933[_0x5f2eda(0x12d)][_0x5f2eda(0x1ea)]=_0xcda260?_0x5f2eda(0x1bf):'none';}function _0x2b5f6c(){const _0x42eaf9=_0xf82ae3,_0x2ead37=document[_0x42eaf9(0x10b)](_0x42eaf9(0x170)),_0xf24b64=document[_0x42eaf9(0x10b)](_0x42eaf9(0x161)),_0x1220bb=document['getElementById'](_0x42eaf9(0x1c3));if(_0x2ead37&&_0xf24b64&&_0x1220bb){if(_0xc34be5==='single'&&_0x2614a3!==null){const _0x260e90=_0x32a390[_0x2614a3]['name'],_0x5e4bc8=_0x32a390[_0x2614a3]['pairs'][_0x230ff6];_0x2ead37[_0x42eaf9(0x18c)]=_0x42eaf9(0x12b)+_0x260e90+_0x42eaf9(0x209)+_0x5e4bc8+_0x42eaf9(0xf4),_0xf24b64[_0x42eaf9(0x15a)]='Multiple:\x20'+_0x260e90,_0x1220bb[_0x42eaf9(0x15a)]=_0x5e4bc8;}else _0xc34be5===_0x42eaf9(0x117)&&_0x90f891?(_0x2ead37[_0x42eaf9(0x18c)]='Mode:\x20<strong>Single\x20Pair</strong>\x20|\x20Pair:\x20<strong>'+_0x90f891+_0x42eaf9(0xf4),_0xf24b64[_0x42eaf9(0x15a)]=_0x42eaf9(0x14a),_0x1220bb[_0x42eaf9(0x15a)]=_0x90f891):(_0x2ead37[_0x42eaf9(0x18c)]=_0x42eaf9(0x113),_0xf24b64[_0x42eaf9(0x15a)]=_0x42eaf9(0x1c0),_0x1220bb[_0x42eaf9(0x15a)]=_0x42eaf9(0x1b2));}}function _0x580b7a(){const _0x2b85d3=_0xf82ae3,_0x1cc88b=document[_0x2b85d3(0x10b)](_0x2b85d3(0xe1)),_0x440afb=document[_0x2b85d3(0x10b)](_0x2b85d3(0xd0)),_0x473bbb=_0x542d00[_0x30cb76];_0x1cc88b&&_0x440afb&&(_0xc34be5===_0x2b85d3(0xf7)?(_0x1cc88b[_0x2b85d3(0x12d)][_0x2b85d3(0x1b4)]=_0x2b85d3(0xdd),_0x1cc88b[_0x2b85d3(0x12d)]['color']='#f0b90b',_0x1cc88b[_0x2b85d3(0x12d)][_0x2b85d3(0xd4)]='2px\x20solid\x20#f0b90b',_0x440afb[_0x2b85d3(0x12d)][_0x2b85d3(0x1b4)]=_0x473bbb['panelBg'],_0x440afb['style'][_0x2b85d3(0x192)]=_0x473bbb['secondary'],_0x440afb['style'][_0x2b85d3(0xd4)]=_0x2b85d3(0x122)+_0x473bbb['secondary']):(_0x1cc88b[_0x2b85d3(0x12d)][_0x2b85d3(0x1b4)]=_0x473bbb[_0x2b85d3(0x178)],_0x1cc88b[_0x2b85d3(0x12d)][_0x2b85d3(0x192)]=_0x473bbb[_0x2b85d3(0xf1)],_0x1cc88b[_0x2b85d3(0x12d)][_0x2b85d3(0xd4)]=_0x2b85d3(0x122)+_0x473bbb['secondary'],_0x440afb[_0x2b85d3(0x12d)][_0x2b85d3(0x1b4)]=_0x2b85d3(0x1b7),_0x440afb[_0x2b85d3(0x12d)]['color']=_0x2b85d3(0x1e3),_0x440afb[_0x2b85d3(0x12d)][_0x2b85d3(0xd4)]=_0x2b85d3(0x1e0)));}function _0x91e880(){const _0x5b0095=_0xf82ae3,_0x54f565=document[_0x5b0095(0x10b)](_0x5b0095(0x1e9)),_0x4e033a=document[_0x5b0095(0x10b)](_0x5b0095(0x10c));_0x54f565&&_0x4e033a&&(_0xc34be5===_0x5b0095(0xf7)?(_0x54f565[_0x5b0095(0xbd)]=![],_0x4e033a[_0x5b0095(0xbd)]=!![]):(_0x54f565[_0x5b0095(0xbd)]=!![],_0x4e033a[_0x5b0095(0xbd)]=![]));}function _0x126b92(_0x11828c){const _0x278bd6=_0xf82ae3;_0xc34be5=_0x11828c,GM_setValue(_0x278bd6(0x103),_0x11828c),_0x2b5f6c(),_0x580b7a(),_0x91e880(),_0x2f25c4(),_0x2bef9e(_0x278bd6(0x1b9)+_0x11828c);}function _0x48eb3c(){const _0x31dee4=_0xf82ae3;_0x2bef9e(_0x31dee4(0x15b)),GM_setValue(_0x31dee4(0x12a),!![]),window[_0x31dee4(0x201)]['reload']();}function _0x421597(){const _0x254356=_0xf82ae3;_0x2bef9e(_0x254356(0xd8),_0x254356(0xbf)),_0x190ada(_0x254356(0xd8),_0x254356(0xbf));let _0x1387c8=0x0;const _0x5a5e06=0x5;function _0x102449(){const _0x289673=_0x254356;_0x1387c8++;const _0x3a2d8f=['div.draggableCancel.text-\x5c[14px\x5c][data-testid=\x22Positions\x22]',_0x289673(0xce),'[data-testid=\x22Positions\x22]',_0x289673(0xbe),_0x289673(0x15d),_0x289673(0x16f),'.css-1dbjc4n.r-1habvwh.r-18u37iz.r-16x7wis.r-1ny4l3l'];let _0x748503=![];for(let _0x594c28 of _0x3a2d8f){try{let _0xc2d524=document[_0x289673(0x217)](_0x594c28);if(_0x594c28[_0x289673(0x17d)](_0x289673(0x173))){const _0x5830a7=document[_0x289673(0x1f7)](_0x289673(0xc6));for(let _0x25a10e of _0x5830a7){if(_0x25a10e[_0x289673(0x15a)]&&_0x25a10e[_0x289673(0x15a)][_0x289673(0x17d)]('Positions')){_0xc2d524=_0x25a10e;break;}}}if(_0xc2d524&&_0xc2d524[_0x289673(0xde)]&&_0x1fd248(_0xc2d524)){_0x2bef9e(_0x289673(0x1a8)+_0x594c28,_0x289673(0x157)),_0xc2d524[_0x289673(0x12e)]({'behavior':_0x289673(0x118),'block':_0x289673(0x196),'inline':_0x289673(0x1c5)}),setTimeout(()=>{const _0x390d82=_0x289673;_0x15d9d4(_0xc2d524,'Positions\x20Tab'),_0x2bef9e(_0x390d82(0x1c6),_0x390d82(0x157)),_0x190ada('Positions\x20tab\x20ACTIVATED',_0x390d82(0x157));},0x64),_0x748503=!![];break;}}catch(_0x13e59a){}}!_0x748503&&(_0x2bef9e('Positions\x20tab\x20not\x20found\x20(attempt\x20'+_0x1387c8+'/'+_0x5a5e06+')',_0x289673(0x10e)),_0x1387c8<_0x5a5e06?setTimeout(_0x102449,0x1f4):(_0x2bef9e(_0x289673(0x1fa),_0x289673(0x1f8)),_0x190ada(_0x289673(0x216),'error')));}return _0x102449(),!![];}function _0x47b965(_0x4165b8){const _0x1774a9=_0xf82ae3;_0x5cb809++,_0x2bef9e(_0x1774a9(0x13a)+_0x4165b8,_0x1774a9(0x1f8)),_0x190ada(_0x1774a9(0x13a)+_0x4165b8,_0x1774a9(0x1f8)),_0x5cb809>=_0x470fba[_0x1774a9(0x1fc)]&&(_0x2bef9e(_0x1774a9(0x194),_0x1774a9(0x1f8)),_0x190ada(_0x1774a9(0x135),_0x1774a9(0x1f8)),GM_setValue(_0x1774a9(0x12a),!![]),window[_0x1774a9(0x201)][_0x1774a9(0xc1)]()),_0xe8f5a1();}function _0x502d32(){const _0x446159=_0xf82ae3;_0x2bef9e(_0x446159(0xf8));}document[_0xf82ae3(0x140)]==='loading'?document['addEventListener']('DOMContentLoaded',_0x6fc949):_0x6fc949(),window[_0xf82ae3(0x15c)](_0xf82ae3(0x13e),function(){setTimeout(()=>{const _0x28b897=_0x289f,_0x4dbdff=GM_getValue(_0x28b897(0x12a),![]);_0x4dbdff&&(GM_setValue(_0x28b897(0x12a),![]),_0x2bef9e('AUTO\x20REFRESH\x20DETECTED\x20-\x20Reactivating\x20Positions\x20tab...',_0x28b897(0x157)),_0x190ada(_0x28b897(0x121),_0x28b897(0xbf)),setTimeout(()=>{_0x421597(),setTimeout(()=>{const _0x214d89=_0x289f;_0xcda260&&(_0x2bef9e('Auto\x20resuming\x20scanning\x20after\x20refresh...',_0x214d89(0x157)),_0x329900());},0x7d0);},0x3e8));},0x3e8);}),_0x2bef9e(_0xf82ae3(0x1d9),_0xf82ae3(0x157));}()));function _0x369c(){const _0x2173f8=['XLMBTC','selectedSinglePair','STORJBTC','ARBTC','Group\x208','target','div:contains(\x22Positions\x22)','mode-info','add','panelTheme',':contains','cssText','>Blue\x20Theme</option>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</select>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20','AVAXBTC','R-V\x20Pairs','panelBg','IOTXBTC','Close',';\x22>Pairs\x20Processed</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20id=\x22pairs-processed\x22\x20style=\x22font-size:\x2014px;\x20font-weight:\x20bold;\x20color:\x20',';\x20font-size:\x2018px;\x20margin-bottom:\x203px;\x22>🚀\x20Ultra\x20Fast\x20Auto\x20Closer</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20style=\x22font-size:\x2011px;\x20color:\x20','includes','DIABTC','\x20in\x20','position-count','sort','Escape','AUCTIONBTC',';\x20margin-top:\x204px;\x20font-weight:\x20bold;\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20Mode:\x20<strong>Select\x20mode</strong>\x20|\x20Pair:\x20<strong\x20id=\x22selected-pair-info\x22>select</strong>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<!--\x20Bottom\x20Controls\x20-->\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20style=\x22display:\x20grid;\x20grid-template-columns:\x201fr\x201fr;\x20gap:\x206px;\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20id=\x22test-panel-btn\x22\x20style=\x22padding:\x206px;\x20background:\x20','All\x20positions\x20processed\x20in\x20current\x20pair','SOLBTC','Error\x20setting\x20up\x20event\x20listeners:\x20','IDLE_REFRESH_TIMEOUT','I-N\x20Pairs','theme-selector','AXSBTC','innerHTML','FILBTC','USDTBTC','GASBTC','name','length','color','22246oymTxl','Max\x20error\x20count\x20reached,\x20refreshing\x20page...','OMBTC','center','STXBTC','some','A-B\x20Pairs','None','Group\x20changed\x20to:\x20','QNTBTC','Found\x20','Idle\x20timeout\x20-\x20Refreshing...','>Light\x20Theme</option>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<option\x20value=\x22blue\x22\x20','Moving\x20to\x20next\x20pair:\x20','#f8f9fa','SUIBTC','button[type=\x22submit\x22]','marginBottom','Group\x206','Error\x20in\x20findOpenPositions:\x20','COTIBTC','Found\x20Positions\x20tab\x20with\x20selector:\x20','SEIBTC','829444QTApPR',';\x22>Errors</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20id=\x22error-count\x22\x20style=\x22font-size:\x2011px;\x20font-weight:\x20bold;\x20color:\x20#ea3943;\x22>0/','light','\x20-\x20Starting\x20close\x20process...','floor','BATBTC','NMRBTC','I-Y\x20Pairs','select','4274763plBUZn','background','90%','ETHBTC','#3a243b','warn','Operation\x20mode\x20changed\x20to:\x20','4UDCuCI','Error\x20finding\x20confirm\x20button:\x20','Ultra\x20fast\x20version\x20initialized\x20successfully','none',';\x20font-size:\x2012px;\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<option\x20value=\x22\x22>--\x20Select\x20Trading\x20Pair\x20--</option>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','block','Select\x20mode',';\x22>Select\x20mode</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20style=\x22text-align:\x20center;\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20style=\x22font-size:\x2010px;\x20color:\x20','#152642','selected-pair-info','OGNBTC','nearest','Positions\x20tab\x20ACTIVATED\x20successfully!','value','FETBTC','DYDXBTC',';\x20margin-bottom:\x204px;\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<strong>EMERGENCY\x20STOP:</strong>\x20Press\x20<kbd\x20style=\x22background:\x20#ea3943;\x20color:\x20white;\x20padding:\x201px\x204px;\x20border-radius:\x202px;\x22>ESC</kbd>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20style=\x22font-size:\x209px;\x20color:\x20','Group\x201',';\x20padding:\x2010px;\x20border-radius:\x205px;\x20margin-bottom:\x2012px;\x20text-align:\x20center;\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20style=\x22display:\x20grid;\x20grid-template-columns:\x201fr\x201fr;\x20gap:\x208px;\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20style=\x22font-size:\x2010px;\x20color:\x20','Error\x20clicking\x20','btc-margin-closer',';\x20border-radius:\x205px;\x20cursor:\x20pointer;\x20font-size:\x2011px;\x20font-weight:\x20bold;\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20⚡\x20SINGLE\x20MODE\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<!--\x20Trading\x20Group\x20Selection\x20-->\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20style=\x22margin-bottom:\x2012px;\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<label\x20style=\x22display:\x20block;\x20margin-bottom:\x206px;\x20font-size:\x2011px;\x20color:\x20','fontSize','left','LRCBTC','104XVbFyq','#0a1a2d','Clicked:\x20','Close\x20All','🚀\x20Ultra\x20Fast\x20Auto\x20Closer','UMABTC','Ultra\x20Fast\x20Version\x20Successfully\x20Loaded!','text',';\x22>-</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<!--\x20Operation\x20Mode\x20Buttons\x20-->\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20style=\x22margin-bottom:\x2012px;\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<label\x20style=\x22display:\x20block;\x20margin-bottom:\x206px;\x20font-size:\x2011px;\x20color:\x20','bold','test-panel-btn','WANBTC',';\x20border-radius:\x205px;\x20cursor:\x20pointer;\x20font-size:\x2011px;\x20font-weight:\x20bold;\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20🔄\x20MULTIPLE\x20MODE\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20id=\x22single-mode-btn\x22\x20style=\x22padding:\x2010px;\x20background:\x20','2px\x20solid\x20#ea3943',';\x22>Current\x20Mode</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20id=\x22current-mode\x22\x20style=\x22font-size:\x2011px;\x20font-weight:\x20bold;\x20color:\x20','createElement','white','time-elapsed','stop-btn','#848e9c','WAXPBTC','ETCBTC','group-select','display','Liquidate','ARPABTC','RUNEBTC','dispatchEvent','trim','hidden','10416070UQpOhc','XTZBTC','header-text','TRBBTC','#2b2f36','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20position:\x20fixed;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20top:\x2070px;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20right:\x2010px;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20z-index:\x201000000;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20background:\x20','querySelectorAll','error','Group\x205','Positions\x20tab\x20activation\x20FAILED\x20after\x20all\x20attempts','1795615mRUWTH','MAX_ERROR_COUNT','CHECK_INTERVAL','appendChild',';\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20id=\x22header-text\x22\x20style=\x22font-weight:\x20bold;\x20color:\x20','zoom','location','W-Z\x20&\x20USDT','ICPBTC',';\x22>0</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20style=\x22font-size:\x2010px;\x20color:\x20','ENABTC','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</select>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<!--\x20Info\x20Panel\x20-->\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20style=\x22background:\x20','ENJBTC','offsetParent',')</strong>\x20|\x20Pair:\x20<strong>','NEARBTC','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<option\x20value=\x22','UNIBTC','processing-pair','#0ecb81','pairs-processed','push',';\x22>-</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20style=\x22margin-top:\x206px;\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20style=\x22font-size:\x2010px;\x20color:\x20','Position\x20','🟢\x20Ready\x20-\x20Select\x20mode\x20and\x20click\x20START','Error\x20creating\x20control\x20panel:\x20','AUDIOBTC','Positions\x20tab\x20not\x20found\x20-\x20Manual\x20navigation\x20needed','querySelector',';\x22>Total\x20Closed</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20id=\x22total-closed\x22\x20style=\x22font-size:\x2016px;\x20font-weight:\x20bold;\x20color:\x20#0ecb81;\x22>0</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20style=\x22display:\x20grid;\x20grid-template-columns:\x201fr\x201fr;\x20gap:\x208px;\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20style=\x22text-align:\x20center;\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20style=\x22font-size:\x2010px;\x20color:\x20',';\x20padding:\x2012px;\x20border-radius:\x206px;\x20margin-bottom:\x2015px;\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20style=\x22display:\x20grid;\x20grid-template-columns:\x201fr\x201fr;\x20gap:\x208px;\x20margin-bottom:\x208px;\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20style=\x22text-align:\x20center;\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20style=\x22font-size:\x2010px;\x20color:\x20','Running\x20-\x20Multiple:\x20','No\x20positions\x20found\x20-\x20continuing\x20scan...','LPTBTC','VETBTC',';\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20Close\x20→\x20Settle\x20in\x20BTC\x20→\x20Confirm\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20id=\x22mode-info\x22\x20style=\x22font-size:\x2010px;\x20color:\x20','disabled','div[class*=\x22Positions\x22]','info','FLUXBTC','reload','Main\x20Pair','Close\x20Position','#e9ecef','3px\x20solid\x20#00ff00','div[class*=\x22tab\x22],\x20button[class*=\x22tab\x22],\x20div.draggableCancel','GRTBTC',';\x20font-weight:\x20bold;\x22>📊\x20SELECT\x20TRADING\x20GROUP:</label>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<select\x20id=\x22group-select\x22\x20style=\x22width:\x20100%;\x20padding:\x208px;\x20border-radius:\x205px;\x20background:\x20','FLOWBTC','dark','toLowerCase',';\x20border-radius:\x203px;\x20cursor:\x20pointer;\x20font-size:\x2010px;\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20Test\x20Panel\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<select\x20id=\x22theme-selector\x22\x20style=\x22padding:\x206px;\x20background:\x20','click','div[data-testid=\x22Positions\x22]',';\x20font-weight:\x20bold;\x22>⚙️\x20OPERATION\x20MODE:</label>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20style=\x22display:\x20grid;\x20grid-template-columns:\x201fr\x201fr;\x20gap:\x208px;\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20id=\x22multiple-mode-btn\x22\x20style=\x22padding:\x2010px;\x20background:\x20','single-mode-btn','keydown','Ultra\x20Fast\x20Version\x20Loading...','Settle\x20in\x20BTC','border','join','function','offsetWidth','Activating\x20Positions\x20tab...','log','CTKBTC','REQBTC',';\x22>0</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20style=\x22text-align:\x20center;\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20style=\x22font-size:\x2010px;\x20color:\x20','#3a3221','isConnected','DUSKBTC','140OcGVxO','multiple-mode-btn','WLDBTC','B-D\x20Pairs','#1e2026','borderLeftColor','ENSBTC','ALGOBTC','DOGEBTC','visibility','5776353bGgOSy','Idle\x20timeout\x20reached,\x20refreshing\x20page...','\x20-\x20','OXTBTC','SUSHIBTC','pairs',';\x22>Current\x20Pair</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20id=\x22current-pair\x22\x20style=\x22font-size:\x2012px;\x20font-weight:\x20bold;\x20color:\x20','secondary','key',';\x22>Processing\x20Pair</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20id=\x22processing-pair\x22\x20style=\x22font-size:\x2012px;\x20font-weight:\x20bold;\x20color:\x20','</strong>','replace','3px','single','Starting\x20background\x20monitoring...','Step\x201:\x20Activating\x20Positions\x20Tab...','Group\x203','activate-tab-btn',';\x20border:\x202px\x20solid\x20','ONTBTC','GALABTC','Theme\x20changed\x20to:\x20','CELOBTC','OPBTC','ZRXBTC','operationMode','refresh-btn','0\x200\x2020px\x20#00ff00','change',';\x22>v2.8.3\x20|\x20BTC-Trader\x20@yannaingko2</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20id=\x22status-display\x22\x20style=\x22background:\x20',';\x20color:\x20','selectedGroup','ADABTC','getElementById','single-pair-select','button','warning','#ea3943','Confirm','3px\x20solid\x20','APEBTC','Mode:\x20<strong>Select\x20mode</strong>\x20|\x20Pair:\x20<strong>select</strong>','remove','7142160eKpKND','getBoundingClientRect','single-pair','smooth',';\x20border-radius:\x203px;\x20font-size:\x2010px;\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<option\x20value=\x22dark\x22\x20','18px','IOTABTC','N-R\x20Pairs','clear','Emergency\x20stop\x20triggered\x20by\x20ESC\x20key','CHRBTC','CONFIRM_CHECK_DELAY','Reactivating\x20Positions\x20tab\x20after\x20refresh...','2px\x20solid\x20','>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20[','btc','SXPBTC','Auto\x20closer\x20is\x20already\x20running','BTCUSDT','max','Please\x20select\x20a\x20trading\x20pair\x20first','reactivatePositionsTab','Mode:\x20<strong>Multiple\x20(',';\x20border:\x201px\x20solid\x20','style','scrollIntoView',';\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20style=\x22font-size:\x2010px;\x20color:\x20','\x20pairs\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</option>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','ICXBTC','DOTBTC','>Dark\x20Theme</option>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<option\x20value=\x22light\x22\x20','div','Max\x20errors\x20-\x20Refreshing\x20page...','⚡\x20BTC-Trader\x20@yannaingko2','Panel\x20visibility\x20test\x20completed','\x20closed\x20successfully\x20in\x20','#f0b90b','Error:\x20','#ffffff','[role=\x22dialog\x22],\x20.modal,\x20[class*=\x22modal\x22\x20i]','MANABTC','load','ATOMBTC','readyState','D-I\x20Pairs','ROSEBTC','CFXBTC','POWRBTC','XRPBTC','NEOBTC','DELAY_BETWEEN_CLICKS','boxShadow','RLCBTC','Single\x20Pair','LTCBTC','Single\x20pair\x20changed\x20to:\x20','PAXGBTC',';\x20padding:\x2012px;\x20border-radius:\x206px;\x20margin-bottom:\x2015px;\x20text-align:\x20center;\x20font-size:\x2012px;\x20min-height:\x2025px;\x20border-left:\x203px\x20solid\x20','Auto-close\x20process\x20STARTED','entries','toLocaleTimeString','start-btn','Control\x20panel\x20created\x20successfully','YFIBTC','HIVEBTC','BNBBTC','success','has','SETTLE_CHECK_DELAY','textContent','Manual\x20refresh\x20triggered','addEventListener','button:contains(\x22Positions\x22)','...','MTLBTC','ZECBTC','current-mode','now','TRXBTC','Error\x20finding\x20settle\x20button:\x20','selected','1INCHBTC','settle','total-closed'];_0x369c=function(){return _0x2173f8;};return _0x369c();}
+
+(function() {
+    'use strict';
+
+    // License Validation Logic
+    let licenseKey = GM_getValue('licenseKey', '');
+
+    if (!licenseKey) {
+        licenseKey = prompt('Enter your license key:');
+        if (!licenseKey) {
+            alert('License key required! Script will not run.');
+            console.error('❌ License key required! Script stopped.');
+            return;
+        }
+    }
+
+    GM_xmlhttpRequest({
+        method: 'POST',
+        url: 'https://us-central1-autoclose-6aa22.cloudfunctions.net/validateLicense',
+        data: JSON.stringify({ key: licenseKey }),
+        headers: { 'Content-Type': 'application/json' },
+        onload: function(response) {
+            let data;
+            try {
+                data = JSON.parse(response.responseText);
+            } catch (e) {
+                alert('Error parsing server response. Please try again later.');
+                console.error('❌ Error parsing server response:', e);
+                return;
+            }
+
+            if (data.valid) {
+                GM_setValue('licenseKey', licenseKey);
+                alert('License activated! Script is running.');
+                console.log('✅ License activated! Starting auto-close script...');
+                initializeAutoCloseScript();
+            } else {
+                alert('Invalid or already used license key! Script will not run.');
+                console.error('❌ Invalid or already used license key:', data.error);
+                GM_deleteValue('licenseKey');
+                return;
+            }
+        },
+        onerror: function() {
+            alert('Error connecting to license server. Please try again later.');
+            console.error('❌ Error connecting to license server.');
+            return;
+        }
+    });
+
+    // Original script logic wrapped in a function
+    function initializeAutoCloseScript() {
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logMessage = `[${timestamp}] ${message}`;
+
+            if (type === 'error') {
+                console.error('❌', logMessage);
+            } else if (type === 'success') {
+                console.log('✅', logMessage);
+            } else if (type === 'warning') {
+                console.warn('⚠️', logMessage);
+            } else {
+                console.log('🔧', logMessage);
+            }
+
+            updateStatus(message, type);
+        }
+
+        log('Ultra Fast Version Loading...');
+
+        const CONFIG = {
+            CHECK_INTERVAL: 5,
+            DELAY_BETWEEN_CLICKS: 2,
+            MODAL_WAIT_TIME: 20,
+            REFRESH_DELAY: 3000,
+            ERROR_RETRY_DELAY: 500,
+            IDLE_REFRESH_TIMEOUT: 300000,
+            POSITIONS_TAB_RETRY_DELAY: 200,
+            POPUP_WAIT_TIME: 15,
+            MAX_ERROR_COUNT: 10,
+            POSITION_PROCESS_DELAY: 10,
+            SAFETY_DELAY: 50,
+            SETTLE_CHECK_ATTEMPTS: 1,
+            SETTLE_CHECK_DELAY: 10,
+            CONFIRM_CHECK_ATTEMPTS: 1,
+            CONFIRM_CHECK_DELAY: 10,
+            RETRY_ATTEMPTS: 1
+        };
+
+        const BTC_GROUPS = {
+            0: {
+                'name': 'BTC/USDT',
+                'category': 'Main Pair',
+                'pairs': ['BTCUSDT']
+            },
+            1: {
+                'name': 'Group 1',
+                'category': 'A-B Pairs',
+                'pairs': [
+                    '1INCHBTC', 'AAVEBTC', 'ADABTC', 'AGLDBTC', 'ALGOBTC',
+                    'APEBTC', 'ARBBTC', 'ARBTC', 'ARPABTC', 'ATOMBTC',
+                    'AUCTIONBTC', 'AUDIOBTC', 'AVAXBTC', 'AXSBTC', 'BATBTC'
+                ]
+            },
+            2: {
+                'name': 'Group 2',
+                'category': 'B-D Pairs',
+                'pairs': [
+                    'BCHBTC', 'BNBBTC', 'CAKEBTC', 'CELOBTC', 'CFXBTC',
+                    'CHRBTC', 'CHZBTC', 'COMPBTC', 'COTIBTC', 'CRVBTC',
+                    'CTKBTC', 'CTSIBTC', 'DASHBTC', 'DIABTC', 'DOGEBTC'
+                ]
+            },
+            3: {
+                'name': 'Group 3',
+                'category': 'D-I Pairs',
+                'pairs': [
+                    'DOTBTC', 'DUSKBTC', 'DYDXBTC', 'EGLDBTC', 'ENABTC',
+                    'ENJBTC', 'ENSBTC', 'ETCBTC', 'ETHBTC', 'FETBTC',
+                    'FILBTC', 'GALABTC', 'GRTBTC', 'HBARBTC', 'INJBTC'
+                ]
+            },
+            4: {
+                'name': 'Group 4',
+                'category': 'I-Y Pairs',
+                'pairs': [
+                    'IOTXBTC', 'JSTBTC', 'KAVABTC', 'ONTBTC', 'OXTBTC',
+                    'SNXBTC', 'SUSHIBTC', 'UNIBTC', 'YFIBTC', 'ZRXBTC',
+                    'FLOWBTC', 'FLUXBTC', 'GASBTC', 'GLMBTC', 'HIVEBTC'
+                ]
+            },
+            5: {
+                'name': 'Group 5',
+                'category': 'I-N Pairs',
+                'pairs': [
+                    'ICPBTC', 'ICXBTC', 'IDBTC', 'IOTABTC', 'KNCBTC',
+                    'KSMBTC', 'LINKBTC', 'LPTBTC', 'LRCBTC', 'LTCBTC',
+                    'MANABTC', 'MINABTC', 'MOVRBTC', 'MTLBTC', 'NEARBTC'
+                ]
+            },
+            6: {
+                'name': 'Group 6',
+                'category': 'N-R Pairs',
+                'pairs': [
+                    'NEOBTC', 'NMRBTC', 'OGNBTC', 'OMBTC', 'ONGBTC',
+                    'OPBTC', 'PAXGBTC', 'PEOPLEBTC', 'POWRBTC', 'PYRBTC',
+                    'QNTBTC', 'RAREBTC', 'REQBTC', 'RLCBTC', 'ROSEBTC'
+                ]
+            },
+            7: {
+                'name': 'Group 7',
+                'category': 'R-V Pairs',
+                'pairs': [
+                    'RUNEBTC', 'SANDBTC', 'SEIBTC', 'SOLBTC', 'STORJBTC',
+                    'STXBTC', 'SUIBTC', 'SUPERBTC', 'SXPBTC', 'SYSBTC',
+                    'THETABTC', 'TRBBTC', 'TRXBTC', 'UMABTC', 'VETBTC'
+                ]
+            },
+            8: {
+                'name': 'Group 8',
+                'category': 'W-Z & USDT',
+                'pairs': [
+                    'WANBTC', 'WAXPBTC', 'WLDBTC', 'XLMBTC', 'XRPBTC',
+                    'XTZBTC', 'YGGBTC', 'ZECBTC', 'USDTBTC'
+                ]
+            }
+        };
+
+        const THEMES = {
+            'dark': {
+                'background': '#1e2026',
+                'text': 'white',
+                'border': '#f0b90b',
+                'panelBg': '#2b2f36',
+                'secondary': '#848e9c'
+            },
+            'light': {
+                'background': '#ffffff',
+                'text': '#1e2026',
+                'border': '#f0b90b',
+                'panelBg': '#f8f9fa',
+                'secondary': '#6c757d'
+            },
+            'blue': {
+                'background': '#0a1a2d',
+                'text': '#e9ecef',
+                'border': '#2172e5',
+                'panelBg': '#152642',
+                'secondary': '#6c8ab3'
+            }
+        };
+
+        let isRunning = false;
+        let processedPositions = new Set();
+        let currentPositionCount = 0;
+        let totalClosed = 0;
+        let errorCount = 0;
+        let lastActivityTime = Date.now();
+        let currentGroup = null;
+        let currentPairIndex = 0;
+        let operationMode = 'single';
+        let selectedSinglePair = null;
+        let currentProcessingPair = '';
+        let scanInterval = null;
+        let currentTheme = GM_getValue('panelTheme', 'dark');
+        let headerInterval = null;
+        let currentHeaderIndex = 0;
+        let startTime = 0;
+        let pairsProcessed = 0;
+
+        function getAllPairs() {
+            const allPairs = [];
+            for (const group of Object.values(BTC_GROUPS)) {
+                allPairs.push(...group.pairs);
+            }
+            return [...new Set(allPairs)].sort();
+        }
+
+        function initializeScript() {
+            log('Initializing Ultra Fast Version...');
+
+            const savedGroup = GM_getValue('selectedGroup', null);
+            const savedMode = GM_getValue('operationMode', 'single');
+            const savedPair = GM_getValue('selectedSinglePair', null);
+
+            currentGroup = savedGroup;
+            operationMode = savedMode;
+            selectedSinglePair = savedPair;
+
+            createControlPanel();
+            startMonitoring();
+            startHeaderAnimation();
+
+            updateStatus('🟢 Ready - Select mode and click START', 'info');
+            updateButtonStates();
+            log('Ultra fast version initialized successfully', 'success');
+
+            setOptimalZoom();
+        }
+
+        function setOptimalZoom() {
+            document.body.style.zoom = '90%';
+            log('Browser zoom optimized for better visibility', 'info');
+        }
+
+        function startHeaderAnimation() {
+            if (headerInterval) clearInterval(headerInterval);
+
+            headerInterval = setInterval(() => {
+                currentHeaderIndex = (currentHeaderIndex + 1) % 2;
+                updateHeaderText();
+            }, 3000);
+        }
+
+        function updateHeaderText() {
+            const headerElement = document.getElementById('header-text');
+            const headers = [
+                '🚀 Ultra Fast Auto Closer',
+                '⚡ BTC-Trader @yannaingko2'
+            ];
+
+            if (headerElement) {
+                headerElement.textContent = headers[currentHeaderIndex];
+                headerElement.style.fontWeight = 'bold';
+                headerElement.style.color = THEMES[currentTheme].border;
+                headerElement.style.fontSize = '18px';
+                headerElement.style.marginBottom = '3px';
+            }
+        }
+
+        function createControlPanel() {
+            const existingPanel = document.getElementById('btc-margin-closer');
+            if (existingPanel) {
+                existingPanel.remove();
+            }
+
+            const theme = THEMES[currentTheme];
+            const panel = document.createElement('div');
+            panel.id = 'btc-margin-closer';
+            panel.style.cssText = `
+                position: fixed;
+                top: 70px;
+                right: 10px;
+                z-index: 1000000;
+                background: ${theme.background};
+                border: 2px solid ${theme.border};
+                border-radius: 10px;
+                padding: 15px;
+                color: ${theme.text};
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                min-width: 450px;
+                max-width: 450px;
+                box-shadow: 0 6px 25px rgba(0,0,0,0.8);
+                font-size: 13px;
+                max-height: 75vh;
+                overflow-y: auto;
+                transform: scale(0.95);
+                transform-origin: top right;
+            `;
+
+            const allPairs = getAllPairs();
+            panel.innerHTML = `
+                <div style="text-align: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid ${theme.border};">
+                    <div id="header-text" style="font-weight: bold; color: ${theme.border}; font-size: 18px; margin-bottom: 3px;">🚀 Ultra Fast Auto Closer</div>
+                    <div style="font-size: 11px; color: ${theme.secondary};">v2.8.3 | BTC-Trader @yannaingko2</div>
+                </div>
+
+                <div id="status-display" style="background: ${theme.panelBg}; padding: 12px; border-radius: 6px; margin-bottom: 15px; text-align: center; font-size: 12px; min-height: 25px; border-left: 3px solid ${theme.border};">
+                    🟢 Ready - Select mode and click START
+                </div>
+
+                <div style="background: ${theme.panelBg}; padding: 10px; border-radius: 5px; margin-bottom: 12px; text-align: center;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                        <div>
+                            <div style="font-size: 10px; color: ${theme.secondary};">Pairs Processed</div>
+                            <div id="pairs-processed" style="font-size: 14px; font-weight: bold; color: ${theme.border};">0</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 10px; color: ${theme.secondary};">Time Elapsed</div>
+                            <div id="time-elapsed" style="font-size: 14px; font-weight: bold; color: #0ecb81;">0s</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 15px;">
+                    <button id="start-btn" style="padding: 12px; background: linear-gradient(135deg, #0ecb81, #0a8); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px;">
+                        🚀 START
+                    </button>
+                    <button id="refresh-btn" style="padding: 12px; background: linear-gradient(135deg, #f0b90b, #d99c00); color: black; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px;">
+                        🔄 REFRESH
+                    </button>
+                    <button id="activate-tab-btn" style="padding: 12px; background: linear-gradient(135deg, #2172e5, #0052cc); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px;">
+                        📍 ACTIVATE TAB
+                    </button>
+                </div>
+                <button id="stop-btn" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #ea3943, #c00); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px; margin-bottom: 15px; display: none;">
+                    🛑 STOP AUTO CLOSER
+                </button>
+
+                <div style="background: ${theme.panelBg}; padding: 12px; border-radius: 6px; margin-bottom: 15px;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 10px; color: ${theme.secondary};">Active Positions</div>
+                            <div id="position-count" style="font-size: 16px; font-weight: bold; color: ${theme.border};">0</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 10px; color: ${theme.secondary};">Total Closed</div>
+                            <div id="total-closed" style="font-size: 16px; font-weight: bold; color: #0ecb81;">0</div>
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 10px; color: ${theme.secondary};">Current Mode</div>
+                            <div id="current-mode" style="font-size: 11px; font-weight: bold; color: ${theme.text};">Select mode</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 10px; color: ${theme.secondary};">Errors</div>
+                            <div id="error-count" style="font-size: 11px; font-weight: bold; color: #ea3943;">0/${CONFIG.MAX_ERROR_COUNT}</div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid ${theme.secondary};">
+                        <div style="font-size: 10px; color: ${theme.secondary};">Current Pair</div>
+                        <div id="current-pair" style="font-size: 12px; font-weight: bold; color: ${theme.text};">-</div>
+                    </div>
+                    <div style="margin-top: 6px;">
+                        <div style="font-size: 10px; color: ${theme.secondary};">Processing Pair</div>
+                        <div id="processing-pair" style="font-size: 12px; font-weight: bold; color: ${theme.border};">-</div>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 12px;">
+                    <label style="display: block; margin-bottom: 6px; font-size: 11px; color: ${theme.secondary}; font-weight: bold;">⚙️ OPERATION MODE:</label>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                        <button id="multiple-mode-btn" style="padding: 10px; background: ${operationMode === 'single' ? '#3a3221' : theme.panelBg}; color: ${operationMode === 'single' ? '#f0b90b' : theme.secondary}; border: 2px solid ${operationMode === 'single' ? '#f0b90b' : theme.secondary}; border-radius: 5px; cursor: pointer; font-size: 11px; font-weight: bold;">
+                            🔄 MULTIPLE MODE
+                        </button>
+                        <button id="single-mode-btn" style="padding: 10px; background: ${operationMode === 'single-pair' ? '#3a243b' : theme.panelBg}; color: ${operationMode === 'single-pair' ? 'white' : theme.secondary}; border: 2px solid ${operationMode === 'single-pair' ? '#ea3943' : theme.secondary}; border-radius: 5px; cursor: pointer; font-size: 11px; font-weight: bold;">
+                            ⚡ SINGLE MODE
+                        </button>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 12px;">
+                    <label style="display: block; margin-bottom: 6px; font-size: 11px; color: ${theme.secondary}; font-weight: bold;">📊 SELECT TRADING GROUP:</label>
+                    <select id="group-select" style="width: 100%; padding: 8px; border-radius: 5px; background: ${theme.panelBg}; color: ${theme.text}; border: 1px solid ${theme.secondary}; font-size: 12px;">
+                        <option value="">-- Select Trading Group --</option>
+                        ${Object.entries(BTC_GROUPS).map(([key, group]) => `
+                            <option value="${key}" ${currentGroup !== null && parseInt(key) === currentGroup ? 'selected' : ''}>
+                                [${key}] ${group.name} - ${group.pairs.length} pairs
+                            </option>
+                        `).join('')}
+                    </select>
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 6px; font-size: 11px; color: ${theme.secondary}; font-weight: bold;">🎯 SELECT SINGLE PAIR:</label>
+                    <select id="single-pair-select" style="width: 100%; padding: 8px; border-radius: 5px; background: ${theme.panelBg}; color: ${theme.text}; border: 1px solid ${theme.secondary}; font-size: 12px;">
+                        <option value="">-- Select Trading Pair --</option>
+                        ${allPairs.map(pair => `
+                            <option value="${pair}" ${selectedSinglePair === pair ? 'selected' : ''}>${pair}</option>
+                        `).join('')}
+                    </select>
+                </div>
+
+                <div style="background: ${theme.panelBg}; padding: 10px; border-radius: 5px; text-align: center; margin-bottom: 12px;">
+                    <div style="font-size: 10px; color: ${theme.secondary}; margin-bottom: 4px;">
+                        <strong>EMERGENCY STOP:</strong> Press <kbd style="background: #ea3943; color: white; padding: 1px 4px; border-radius: 2px;">ESC</kbd>
+                    </div>
+                    <div style="font-size: 9px; color: ${theme.secondary};">
+                        Close → Settle in BTC → Confirm
+                    </div>
+                    <div id="mode-info" style="font-size: 10px; color: ${theme.border}; margin-top: 4px; font-weight: bold;">
+                        Mode: <strong>Select mode</strong> | Pair: <strong id="selected-pair-info">select</strong>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+                    <button id="test-panel-btn" style="padding: 6px; background: ${theme.panelBg}; color: ${theme.text}; border: 1px solid ${theme.secondary}; border-radius: 3px; cursor: pointer; font-size: 10px;">
+                        Test Panel
+                    </button>
+                    <select id="theme-selector" style="padding: 6px; background: ${theme.panelBg}; color: ${theme.text}; border: 1px solid ${theme.secondary}; border-radius: 3px; font-size: 10px;">
+                        <option value="dark" ${currentTheme === 'dark' ? 'selected' : ''}>Dark Theme</option>
+                        <option value="light" ${currentTheme === 'light' ? 'selected' : ''}>Light Theme</option>
+                        <option value="blue" ${currentTheme === 'blue' ? 'selected' : ''}>Blue Theme</option>
+                    </select>
+                </div>
+            `;
+
+            try {
+                document.body.appendChild(panel);
+                log('Control panel created successfully', 'success');
+
+                setTimeout(() => {
+                    setupEventListeners();
+                }, 50);
+            } catch (error) {
+                log('Error creating control panel: ' + error, 'error');
+            }
+        }
+
+        function updateSpeedStats() {
+            const pairsProcessedElement = document.getElementById('pairs-processed');
+            const timeElapsedElement = document.getElementById('time-elapsed');
+
+            if (pairsProcessedElement) pairsProcessedElement.textContent = pairsProcessed;
+            if (timeElapsedElement && startTime > 0) {
+                const elapsed = Math.floor((Date.now() - startTime) / 1000);
+                timeElapsedElement.textContent = `${elapsed}s`;
+            }
+        }
+
+        function findOpenPositions() {
+            const positions = [];
+
+            try {
+                const closeButtonTexts = ['Close Position', 'Close', 'Close All', 'Liquidate'];
+                const allElements = document.querySelectorAll('button, div, span');
+
+                for (let element of allElements) {
+                    try {
+                        if (element.textContent && element.isConnected && isElementVisible(element)) {
+                            const text = element.textContent.trim();
+                            if (closeButtonTexts.some(btnText => text === btnText)) {
+                                const positionId = generatePositionId(element);
+                                if (!processedPositions.has(positionId)) {
+                                    positions.push({
+                                        element: element,
+                                        button: element,
+                                        id: positionId
+                                    });
+                                }
+                            }
+                        }
+                    } catch (e) {
+                        // Skip individual element errors
+                    }
+                }
+            } catch (error) {
+                log('Error in findOpenPositions: ' + error, 'error');
+            }
+
+            return positions;
+        }
+
+        function findSettleButton() {
+            try {
+                const allButtons = document.querySelectorAll('button, div, span');
+                for (let element of allButtons) {
+                    if (element.textContent && element.isConnected && isElementVisible(element)) {
+                        const text = element.textContent.trim().toLowerCase();
+                        if (text.includes('settle') && text.includes('btc')) {
+                            return element;
+                        }
+                    }
+                }
+            } catch (error) {
+                log('Error finding settle button: ' + error, 'error');
+            }
+            return null;
+        }
+
+        function findConfirmButton() {
+            try {
+                const confirmSelectors = [
+                    'button[type="submit"]',
+                    'button[class*="confirm" i]',
+                    'button[class*="primary" i]',
+                    '[data-testid*="confirm" i]'
+                ];
+
+                const modals = document.querySelectorAll('[role="dialog"], .modal, [class*="modal" i]');
+                for (let modal of modals) {
+                    for (let selector of confirmSelectors) {
+                        try {
+                            const elements = modal.querySelectorAll(selector);
+                            for (let element of elements) {
+                                if (element.isConnected && isElementVisible(element)) {
+                                    return element;
+                                }
+                            }
+                        } catch (error) {
+                            // Continue
+                        }
+                    }
+                }
+
+                for (let selector of confirmSelectors) {
+                    try {
+                        const elements = document.querySelectorAll(selector);
+                        for (let element of elements) {
+                            if (element.isConnected && isElementVisible(element)) {
+                                return element;
+                            }
+                        }
+                    } catch (error) {
+                        // Continue
+                    }
+                }
+            } catch (error) {
+                log('Error finding confirm button: ' + error, 'error');
+            }
+            return null;
+        }
+
+        function safeClick(element, description) {
+            try {
+                if (element && element.isConnected && isElementVisible(element)) {
+                    element.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
+
+                    const clickMethods = [
+                        () => { if (typeof element.click === 'function') element.click(); },
+                        () => {
+                            const event = new MouseEvent('click', {
+                                view: window,
+                                bubbles: true,
+                                cancelable: true
+                            });
+                            element.dispatchEvent(event);
+                        }
+                    ];
+
+                    for (let method of clickMethods) {
+                        try {
+                            method();
+                        } catch (e) {
+                            // Continue to next method
+                        }
+                    }
+
+                    log(`Clicked: ${description}`);
+                    return true;
+                }
+                return false;
+            } catch (error) {
+                log(`Error clicking ${description}: ` + error, 'error');
+                return false;
+            }
+        }
+
+        function isElementVisible(element) {
+            if (!element) return false;
+            try {
+                const style = window.getComputedStyle(element);
+                return style.display !== 'none' &&
+                       style.visibility !== 'hidden' &&
+                       element.offsetParent !== null &&
+                       element.offsetWidth > 0 &&
+                       element.offsetHeight > 0;
+            } catch (error) {
+                return false;
+            }
+        }
+
+        function processModalButtons(position, onSuccess, onError) {
+            const settleBtn = findSettleButton();
+            if (settleBtn && safeClick(settleBtn, 'Settle in BTC')) {
+                setTimeout(() => {
+                    const confirmBtn = findConfirmButton();
+                    if (confirmBtn && safeClick(confirmBtn, 'Confirm')) {
+                        setTimeout(() => onSuccess(), CONFIG.CONFIRM_CHECK_DELAY);
+                    } else {
+                        onSuccess();
+                    }
+                }, CONFIG.SETTLE_CHECK_DELAY);
+            } else {
+                const confirmBtn = findConfirmButton();
+                if (confirmBtn && safeClick(confirmBtn, 'Confirm')) {
+                    setTimeout(() => onSuccess(), CONFIG.CONFIRM_CHECK_DELAY);
+                } else {
+                    onSuccess();
+                }
+            }
+        }
+
+        function closeNextPosition(positions, index, retryCount = 0) {
+            if (!isRunning) return;
+
+            if (index >= positions.length) {
+                updateStatus('All positions processed in current pair', 'success');
+                moveToNextPair();
+                return;
+            }
+
+            const position = positions[index];
+            const currentPair = BTC_GROUPS[currentGroup].pairs[currentPairIndex];
+            updateStatus(`Closing position ${index + 1}/${positions.length} in ${currentPair}...`, 'warning');
+
+            if (!position.button.isConnected) {
+                processedPositions.add(position.id);
+                setTimeout(() => closeNextPosition(positions, index + 1), 1);
+                return;
+            }
+
+            if (safeClick(position.button, 'Close Position button')) {
+                setTimeout(() => {
+                    if (!isRunning) return;
+
+                    processModalButtons(position, () => {
+                        processedPositions.add(position.id);
+                        totalClosed++;
+                        errorCount = Math.max(0, errorCount - 1);
+                        updateStats();
+                        updateStatus(`Position ${index + 1} closed successfully in ${currentPair}`, 'success');
+                        lastActivityTime = Date.now();
+                        setTimeout(() => closeNextPosition(positions, index + 1), CONFIG.DELAY_BETWEEN_CLICKS);
+                    }, () => {
+                        processedPositions.add(position.id);
+                        setTimeout(() => closeNextPosition(positions, index + 1), CONFIG.DELAY_BETWEEN_CLICKS);
+                    });
+
+                }, CONFIG.MODAL_WAIT_TIME);
+            } else {
+                processedPositions.add(position.id);
+                setTimeout(() => closeNextPosition(positions, index + 1), CONFIG.DELAY_BETWEEN_CLICKS);
+            }
+        }
+
+        function generatePositionId(element) {
+            const rect = element.getBoundingClientRect();
+            const text = element.textContent || '';
+            return `${text}-${rect.top}-${rect.left}-${Date.now()}`.replace(/\s+/g, '_');
+        }
+
+        function moveToNextPair() {
+            pairsProcessed++;
+            updateSpeedStats();
+
+            if (operationMode === 'single' && currentGroup !== null && currentPairIndex < BTC_GROUPS[currentGroup].pairs.length - 1) {
+                currentPairIndex++;
+                updateModeInfo();
+                const nextPair = BTC_GROUPS[currentGroup].pairs[currentPairIndex];
+                log(`Moving to next pair: ${nextPair}`);
+                updateStatus(`Moving to next pair: ${nextPair}`, 'info');
+
+                setTimeout(() => {
+                    if (isRunning) {
+                        scanAndClosePositions();
+                    }
+                }, CONFIG.CHECK_INTERVAL);
+            } else if (operationMode === 'single' && currentGroup !== null && currentPairIndex >= BTC_GROUPS[currentGroup].pairs.length - 1) {
+                currentPairIndex = 0;
+                updateModeInfo();
+                log(`Completed group cycle, restarting from first pair`);
+                updateStatus(`Completed group cycle, restarting from first pair`, 'info');
+
+                setTimeout(() => {
+                    if (isRunning) {
+                        scanAndClosePositions();
+                    }
+                }, CONFIG.CHECK_INTERVAL);
+            } else {
+                setTimeout(() => {
+                    if (isRunning) {
+                        scanAndClosePositions();
+                    }
+                }, CONFIG.CHECK_INTERVAL);
+            }
+        }
+
+        function scanAndClosePositions() {
+            if (!isRunning) return;
+
+            try {
+                const positions = findOpenPositions();
+                currentPositionCount = positions.length;
+                updateStats();
+
+                if (positions.length === 0) {
+                    log('No Close Position buttons found');
+                    updateStatus('No positions found - continuing scan...', 'info');
+
+                    if (Date.now() - lastActivityTime > CONFIG.IDLE_REFRESH_TIMEOUT) {
+                        log('Idle timeout reached, refreshing page...', 'warning');
+                        updateStatus('Idle timeout - Refreshing...', 'warning');
+                        GM_setValue('reactivatePositionsTab', true);
+                        window.location.reload();
+                        return;
+                    }
+                    moveToNextPair();
+                } else {
+                    let currentPair = operationMode === 'single' ? BTC_GROUPS[currentGroup].pairs[currentPairIndex] : selectedSinglePair;
+                    log(`Found ${positions.length} positions for ${currentPair}`, 'success');
+                    updateStatus(`Found ${positions.length} positions for ${currentPair} - Starting close process...`, 'warning');
+                    lastActivityTime = Date.now();
+                    closeNextPosition(positions, 0);
+                }
+            } catch (error) {
+                handleError('Error during position scanning: ' + error);
+            }
+        }
+
+        function setupEventListeners() {
+            try {
+                document.getElementById('start-btn').addEventListener('click', startAutoClose);
+                document.getElementById('stop-btn').addEventListener('click', stopAutoClose);
+                document.getElementById('refresh-btn').addEventListener('click', refreshPage);
+                document.getElementById('activate-tab-btn').addEventListener('click', activatePositionsTab);
+                document.getElementById('test-panel-btn').addEventListener('click', testPanelVisibility);
+
+                document.getElementById('group-select').addEventListener('change', function(e) {
+                    currentGroup = e.target.value === "" ? null : parseInt(e.target.value);
+                    GM_setValue('selectedGroup', currentGroup);
+                    currentPairIndex = 0;
+                    updateModeInfo();
+                    updateDropdownStates();
+                    log(`Group changed to: ${currentGroup !== null ? BTC_GROUPS[currentGroup].name : 'None'}`);
+                });
+
+                document.getElementById('single-pair-select').addEventListener('change', function(e) {
+                    selectedSinglePair = e.target.value === "" ? null : e.target.value;
+                    GM_setValue('selectedSinglePair', selectedSinglePair);
+                    updateModeInfo();
+                    updateDropdownStates();
+                    log(`Single pair changed to: ${selectedSinglePair || 'None'}`);
+                });
+
+                document.getElementById('multiple-mode-btn').addEventListener('click', function() {
+                    setOperationMode('single');
+                });
+
+                document.getElementById('single-mode-btn').addEventListener('click', function() {
+                    setOperationMode('single-pair');
+                });
+
+                document.getElementById('theme-selector').addEventListener('change', function(e) {
+                    currentTheme = e.target.value;
+                    GM_setValue('panelTheme', currentTheme);
+                    createControlPanel();
+                    startHeaderAnimation();
+                    log(`Theme changed to: ${currentTheme}`);
+                });
+
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape') {
+                        log('Emergency stop triggered by ESC key');
+                        stopAutoClose();
+                    }
+                });
+
+                updateModeInfo();
+                updateOperationModeButtons();
+                updateDropdownStates();
+                updateButtonStates();
+
+            } catch (error) {
+                log('Error setting up event listeners: ' + error, 'error');
+            }
+        }
+
+        function testPanelVisibility() {
+            const panel = document.getElementById('btc-margin-closer');
+            if (panel) {
+                panel.style.border = '3px solid #00ff00';
+                panel.style.boxShadow = '0 0 20px #00ff00';
+
+                setTimeout(() => {
+                    panel.style.border = `3px solid ${THEMES[currentTheme].border}`;
+                    panel.style.boxShadow = '0 8px 35px rgba(0,0,0,0.8)';
+                }, 1000);
+
+                log('Panel visibility test completed', 'success');
+                updateStatus('Panel visibility test completed', 'success');
+            }
+        }
+
+        function startAutoClose() {
+            log('Starting auto close process...', 'success');
+
+            if (operationMode === 'single' && currentGroup === null) {
+                updateStatus('Please select a trading group first', 'error');
+                return;
+            }
+
+            if (operationMode === 'single-pair' && selectedSinglePair === null) {
+                updateStatus('Please select a trading pair first', 'error');
+                return;
+            }
+
+            if (!isRunning) {
+                isRunning = true;
+                startTime = Date.now();
+                pairsProcessed = 0;
+                log('Auto-close process STARTED', 'success');
+
+                processedPositions.clear();
+                currentPositionCount = 0;
+                totalClosed = 0;
+                errorCount = 0;
+                currentPairIndex = 0;
+                lastActivityTime = Date.now();
+
+                updateButtonStates();
+                updateStats();
+                updateSpeedStats();
+
+                switch(operationMode) {
+                    case 'single':
+                        updateStatus(`Running - Multiple: ${BTC_GROUPS[currentGroup].name}`, 'success');
+                        break;
+                    case 'single-pair':
+                        updateStatus(`Running - Single: ${selectedSinglePair}`, 'success');
+                        break;
+                }
+
+                setTimeout(() => {
+                    log('Step 1: Activating Positions Tab...', 'info');
+                    activatePositionsTab();
+
+                    setTimeout(() => {
+                        if (isRunning) {
+                            log('Step 2: Starting Position Scan...', 'info');
+                            scanAndClosePositions();
+                        }
+                    }, 1000);
+                }, CONFIG.SAFETY_DELAY);
+            } else {
+                updateStatus('Auto closer is already running', 'warning');
+            }
+        }
+
+        function stopAutoClose() {
+            log('Stopping auto close process...');
+
+            if (isRunning) {
+                isRunning = false;
+
+                if (scanInterval) {
+                    clearInterval(scanInterval);
+                    scanInterval = null;
+                }
+                if (headerInterval) {
+                    clearInterval(headerInterval);
+                    headerInterval = null;
+                }
+
+                processedPositions.clear();
+                updateProcessingPair('');
+
+                updateButtonStates();
+                updateStatus('Auto closer stopped by user', 'error');
+                log('Auto-close process STOPPED', 'success');
+            } else {
+                updateStatus('Auto closer is not running', 'warning');
+            }
+        }
+
+        function updateStatus(message, type = 'info') {
+            const statusElement = document.getElementById('status-display');
+            if (statusElement) {
+                statusElement.textContent = message;
+
+                if (type === 'error') {
+                    statusElement.style.borderLeftColor = '#ea3943';
+                    statusElement.style.color = '#ea3943';
+                } else if (type === 'success') {
+                    statusElement.style.borderLeftColor = '#0ecb81';
+                    statusElement.style.color = '#0ecb81';
+                } else if (type === 'warning') {
+                    statusElement.style.borderLeftColor = '#f0b90b';
+                    statusElement.style.color = '#f0b90b';
+                } else {
+                    statusElement.style.borderLeftColor = THEMES[currentTheme].border;
+                    statusElement.style.color = THEMES[currentTheme].text;
+                }
+            }
+        }
+
+        function updateStats() {
+            const positionCountElement = document.getElementById('position-count');
+            const totalClosedElement = document.getElementById('total-closed');
+            const errorCountElement = document.getElementById('error-count');
+            const currentPairElement = document.getElementById('current-pair');
+
+            if (positionCountElement) positionCountElement.textContent = currentPositionCount;
+            if (totalClosedElement) totalClosedElement.textContent = totalClosed;
+            if (errorCountElement) errorCountElement.textContent = `${errorCount}/${CONFIG.MAX_ERROR_COUNT}`;
+
+            if (currentPairElement) {
+                if (operationMode === 'single' && currentGroup !== null) {
+                    currentPairElement.textContent = BTC_GROUPS[currentGroup].pairs[currentPairIndex];
+                } else if (operationMode === 'single-pair' && selectedSinglePair) {
+                    currentPairElement.textContent = selectedSinglePair;
+                } else {
+                    currentPairElement.textContent = '-';
+                }
+            }
+        }
+
+        function updateProcessingPair(pair) {
+            const processingElement = document.getElementById('processing-pair');
+            if (processingElement) {
+                processingElement.textContent = pair || '-';
+            }
+            currentProcessingPair = pair;
+        }
+
+        function updateButtonStates() {
+            const startBtn = document.getElementById('start-btn');
+            const stopBtn = document.getElementById('stop-btn');
+
+            if (startBtn) startBtn.style.display = isRunning ? 'none' : 'block';
+            if (stopBtn) stopBtn.style.display = isRunning ? 'block' : 'none';
+        }
+
+        function updateModeInfo() {
+            const modeInfoElement = document.getElementById('mode-info');
+            const currentModeElement = document.getElementById('current-mode');
+            const selectedPairInfoElement = document.getElementById('selected-pair-info');
+
+            if (modeInfoElement && currentModeElement && selectedPairInfoElement) {
+                if (operationMode === 'single' && currentGroup !== null) {
+                    const groupName = BTC_GROUPS[currentGroup].name;
+                    const currentPair = BTC_GROUPS[currentGroup].pairs[currentPairIndex];
+                    modeInfoElement.innerHTML = `Mode: <strong>Multiple (${groupName})</strong> | Pair: <strong>${currentPair}</strong>`;
+                    currentModeElement.textContent = `Multiple: ${groupName}`;
+                    selectedPairInfoElement.textContent = currentPair;
+                } else if (operationMode === 'single-pair' && selectedSinglePair) {
+                    modeInfoElement.innerHTML = `Mode: <strong>Single Pair</strong> | Pair: <strong>${selectedSinglePair}</strong>`;
+                    currentModeElement.textContent = 'Single Pair';
+                    selectedPairInfoElement.textContent = selectedSinglePair;
+                } else {
+                    modeInfoElement.innerHTML = 'Mode: <strong>Select mode</strong> | Pair: <strong>select</strong>';
+                    currentModeElement.textContent = 'Select mode';
+                    selectedPairInfoElement.textContent = 'select';
+                }
+            }
+        }
+
+        function updateOperationModeButtons() {
+            const multipleBtn = document.getElementById('multiple-mode-btn');
+            const singleBtn = document.getElementById('single-mode-btn');
+            const theme = THEMES[currentTheme];
+
+            if (multipleBtn && singleBtn) {
+                if (operationMode === 'single') {
+                    multipleBtn.style.background = '#3a3221';
+                    multipleBtn.style.color = '#f0b90b';
+                    multipleBtn.style.border = '2px solid #f0b90b';
+
+                    singleBtn.style.background = theme.panelBg;
+                    singleBtn.style.color = theme.secondary;
+                    singleBtn.style.border = `2px solid ${theme.secondary}`;
+                } else {
+                    multipleBtn.style.background = theme.panelBg;
+                    multipleBtn.style.color = theme.secondary;
+                    multipleBtn.style.border = `2px solid ${theme.secondary}`;
+
+                    singleBtn.style.background = '#3a243b';
+                    singleBtn.style.color = 'white';
+                    singleBtn.style.border = '2px solid #ea3943';
+                }
+            }
+        }
+
+        function updateDropdownStates() {
+            const groupSelect = document.getElementById('group-select');
+            const pairSelect = document.getElementById('single-pair-select');
+
+            if (groupSelect && pairSelect) {
+                if (operationMode === 'single') {
+                    groupSelect.disabled = false;
+                    pairSelect.disabled = true;
+                } else {
+                    groupSelect.disabled = true;
+                    pairSelect.disabled = false;
+                }
+            }
+        }
+
+        function setOperationMode(mode) {
+            operationMode = mode;
+            GM_setValue('operationMode', mode);
+
+            updateModeInfo();
+            updateOperationModeButtons();
+            updateDropdownStates();
+            updateButtonStates();
+
+            log(`Operation mode changed to: ${mode}`);
+        }
+
+        function refreshPage() {
+            log('Manual refresh triggered');
+            GM_setValue('reactivatePositionsTab', true);
+            window.location.reload();
+        }
+
+        function activatePositionsTab() {
+            log('Activating Positions tab...', 'info');
+            updateStatus('Activating Positions tab...', 'info');
+
+            let attempts = 0;
+            const maxAttempts = 5;
+
+            function tryActivate() {
+                attempts++;
+
+                const selectors = [
+                    'div.draggableCancel.text-\\[14px\\][data-testid="Positions"]',
+                    'div[data-testid="Positions"]',
+                    '[data-testid="Positions"]',
+                    'div[class*="Positions"]',
+                    'button:contains("Positions")',
+                    'div:contains("Positions")',
+                    '.css-1dbjc4n.r-1habvwh.r-18u37iz.r-16x7wis.r-1ny4l3l'
+                ];
+
+                let tabFound = false;
+
+                for (let selector of selectors) {
+                    try {
+                        let positionsTab = document.querySelector(selector);
+
+                        if (selector.includes(':contains')) {
+                            const allTabs = document.querySelectorAll('div[class*="tab"], button[class*="tab"], div.draggableCancel');
+                            for (let tab of allTabs) {
+                                if (tab.textContent && tab.textContent.includes('Positions')) {
+                                    positionsTab = tab;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (positionsTab && positionsTab.isConnected && isElementVisible(positionsTab)) {
+                            log(`Found Positions tab with selector: ${selector}`, 'success');
+
+                            positionsTab.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'center',
+                                inline: 'nearest'
+                            });
+
+                            setTimeout(() => {
+                                safeClick(positionsTab, 'Positions Tab');
+                                log('Positions tab ACTIVATED successfully!', 'success');
+                                updateStatus('Positions tab ACTIVATED', 'success');
+                            }, 100);
+
+                            tabFound = true;
+                            break;
+                        }
+                    } catch (error) {
+                        // Continue
+                    }
+                }
+
+                if (!tabFound) {
+                    log(`Positions tab not found (attempt ${attempts}/${maxAttempts})`, 'warning');
+
+                    if (attempts < maxAttempts) {
+                        setTimeout(tryActivate, 500);
+                    } else {
+                        log('Positions tab activation FAILED after all attempts', 'error');
+                        updateStatus('Positions tab not found - Manual navigation needed', 'error');
+                    }
+                }
+            }
+
+            tryActivate();
+            return true;
+        }
+
+        function handleError(errorMessage) {
+            errorCount++;
+            log(`Error: ${errorMessage}`, 'error');
+            updateStatus(`Error: ${errorMessage}`, 'error');
+
+            if (errorCount >= CONFIG.MAX_ERROR_COUNT) {
+                log('Max error count reached, refreshing page...', 'error');
+                updateStatus('Max errors - Refreshing page...', 'error');
+                GM_setValue('reactivatePositionsTab', true);
+                window.location.reload();
+            }
+
+            updateStats();
+        }
+
+        function startMonitoring() {
+            log('Starting background monitoring...');
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeScript);
+        } else {
+            initializeScript();
+        }
+
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                const needReactivate = GM_getValue('reactivatePositionsTab', false);
+                if (needReactivate) {
+                    GM_setValue('reactivatePositionsTab', false);
+                    log('AUTO REFRESH DETECTED - Reactivating Positions tab...', 'success');
+                    updateStatus('Reactivating Positions tab after refresh...', 'info');
+
+                    setTimeout(() => {
+                        activatePositionsTab();
+
+                        setTimeout(() => {
+                            if (isRunning) {
+                                log('Auto resuming scanning after refresh...', 'success');
+                                scanAndClosePositions();
+                            }
+                        }, 2000);
+                    }, 1000);
+                }
+            }, 1000);
+        });
+
+        log('Ultra Fast Version Successfully Loaded!', 'success');
+    }
+})();
