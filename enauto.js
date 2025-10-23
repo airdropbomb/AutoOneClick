@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Binance Isolated Margin Auto Closer - Ultra Fast
 // @namespace    http://tampermonkey.net/
-// @version      2.8.5
+// @version      2.8.6
 // @description  Ultra fast auto closer with license key validation - BTC-Trader @yannaingko2
 // @author       BTC-Trader
 // @match        https://www.binance.com/*
@@ -65,7 +65,9 @@
             SETTLE_CHECK_DELAY: 10,
             CONFIRM_CHECK_ATTEMPTS: 1,
             CONFIRM_CHECK_DELAY: 10,
-            RETRY_ATTEMPTS: 1
+            RETRY_ATTEMPTS: 1,
+            PANEL_CREATION_RETRIES: 5,
+            PANEL_CREATION_DELAY: 1000
         };
 
         const BTC_GROUPS = {
@@ -208,7 +210,8 @@
             operationMode = savedMode;
             selectedSinglePair = savedPair;
 
-            createControlPanel();
+            // Retry creating control panel
+            createControlPanelWithRetry();
             startMonitoring();
             startHeaderAnimation();
 
@@ -249,6 +252,27 @@
             }
         }
 
+        function createControlPanelWithRetry(attempt = 1) {
+            if (attempt > CONFIG.PANEL_CREATION_RETRIES) {
+                log(`Failed to create control panel after ${CONFIG.PANEL_CREATION_RETRIES} attempts`, 'error');
+                updateStatus('Failed to create control panel. Please refresh manually.', 'error');
+                return;
+            }
+
+            if (!document.body) {
+                log(`Document body not ready, retrying (${attempt}/${CONFIG.PANEL_CREATION_RETRIES})...`, 'warning');
+                setTimeout(() => createControlPanelWithRetry(attempt + 1), CONFIG.PANEL_CREATION_DELAY);
+                return;
+            }
+
+            try {
+                createControlPanel();
+            } catch (error) {
+                log(`Error creating control panel (attempt ${attempt}/${CONFIG.PANEL_CREATION_RETRIES}): ${error}`, 'error');
+                setTimeout(() => createControlPanelWithRetry(attempt + 1), CONFIG.PANEL_CREATION_DELAY);
+            }
+        }
+
         function createControlPanel() {
             const existingPanel = document.getElementById('btc-margin-closer');
             if (existingPanel) {
@@ -283,7 +307,7 @@
             panel.innerHTML = `
                 <div style="text-align: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid ${theme.border};">
                     <div id="header-text" style="font-weight: bold; color: ${theme.border}; font-size: 18px; margin-bottom: 3px;">🚀 Ultra Fast Auto Closer</div>
-                    <div style="font-size: 11px; color: ${theme.secondary};">v2.8.5 | BTC-Trader @yannaingko2</div>
+                    <div style="font-size: 11px; color: ${theme.secondary};">v2.8.6 | BTC-Trader @yannaingko2</div>
                 </div>
 
                 <div id="status-display" style="background: ${theme.panelBg}; padding: 12px; border-radius: 6px; margin-bottom: 15px; text-align: center; font-size: 12px; min-height: 25px; border-left: 3px solid ${theme.border};">
@@ -422,7 +446,7 @@
                     setupEventListeners();
                 }, 50);
             } catch (error) {
-                log('Error creating control panel: ' + error, 'error');
+                throw new Error(`Failed to append control panel: ${error}`);
             }
         }
 
@@ -818,7 +842,7 @@
                 document.getElementById('theme-selector').addEventListener('change', function(e) {
                     currentTheme = e.target.value;
                     GM_setValue('panelTheme', currentTheme);
-                    createControlPanel();
+                    createControlPanelWithRetry();
                     startHeaderAnimation();
                     log(`Theme changed to: ${currentTheme}`);
                 });
@@ -853,6 +877,10 @@
 
                 log('Panel visibility test completed', 'success');
                 updateStatus('Panel visibility test completed', 'success');
+            } else {
+                log('Panel not found for visibility test', 'error');
+                updateStatus('Control panel not found. Retrying...', 'error');
+                createControlPanelWithRetry();
             }
         }
 
@@ -1183,32 +1211,44 @@
             log('Starting background monitoring...');
         }
 
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initializeScript);
-        } else {
-            initializeScript();
+        function waitForDocumentReady(callback) {
+            if (document.readyState === 'complete' || document.readyState === 'interactive') {
+                callback();
+            } else {
+                document.addEventListener('DOMContentLoaded', callback);
+                window.addEventListener('load', callback);
+            }
         }
 
-        window.addEventListener('load', function() {
+        waitForDocumentReady(() => {
+            initializeScript();
+            // Ensure panel creation after page load
             setTimeout(() => {
-                const needReactivate = GM_getValue('reactivatePositionsTab', false);
-                if (needReactivate) {
-                    GM_setValue('reactivatePositionsTab', false);
-                    log('AUTO REFRESH DETECTED - Reactivating Positions tab...', 'success');
-                    updateStatus('Reactivating Positions tab after refresh...', 'info');
+                if (!document.getElementById('btc-margin-closer')) {
+                    log('Control panel not found after initialization, retrying...', 'warning');
+                    createControlPanelWithRetry();
+                }
+            }, 2000);
+
+            // Handle page refresh
+            const needReactivate = GM_getValue('reactivatePositionsTab', false);
+            if (needReactivate) {
+                GM_setValue('reactivatePositionsTab', false);
+                log('AUTO REFRESH DETECTED - Reactivating Positions tab...', 'success');
+                updateStatus('Reactivating Positions tab after refresh...', 'info');
+
+                setTimeout(() => {
+                    createControlPanelWithRetry();
+                    activatePositionsTab();
 
                     setTimeout(() => {
-                        activatePositionsTab();
-
-                        setTimeout(() => {
-                            if (isRunning) {
-                                log('Auto resuming scanning after refresh...', 'success');
-                                scanAndClosePositions();
-                            }
-                        }, 2000);
-                    }, 1000);
-                }
-            }, 1000);
+                        if (isRunning) {
+                            log('Auto resuming scanning after refresh...', 'success');
+                            scanAndClosePositions();
+                        }
+                    }, 2000);
+                }, 1000);
+            }
         });
 
         log('Ultra Fast Version Successfully Loaded!', 'success');
